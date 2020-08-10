@@ -1,0 +1,13 @@
+.transaction {
+    display: flex;
+    padding: 10px;
+}
+
+.transaction-category-selection {
+    width: 200px;
+    padding: 10px;
+}
+
+.transaction-description {
+    padding: 10px;
+}
