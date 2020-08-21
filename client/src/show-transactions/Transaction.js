@@ -6,38 +6,32 @@ import moment from 'moment'
 import 'moment/locale/nl'
 import {uploadFile} from "../upload-transactions/thunks"
 import {clearNewTransactions} from "../upload-transactions/actions"
-import {setCategory} from "./thunks"
+import {setCategoryRequest} from "./thunks"
 
-const Transaction = ({ transaction, setCategory }) => {
+const Transaction = ({ transaction, categories, setCategory }) => {
 
-	const categories = [
-		{
-			"value": 0,
-			"label": "Category A"
-		}, {
-			"value": 1,
-			"label": "Category B"
-		}, {
-			"value": 2,
-			"label": "Category C"
+	const categoriesAsOptions = categories.map(category => {
+		const parent = categories.find(parent => parent.id === category.parent)
+		let label = category.name
+		if (parent) {
+			label = label + " (" + parent.name + ")"
 		}
-	]
+		return {
+			"value": category.id,
+			"label": label
+		}
+	})
 
-	const [selectedCategory] = useState(transaction.category || -1)
-
-	const getSelectedValue = () => {
-		return selectedCategory !== -1 ? categoryAsObject(selectedCategory) : null
-	}
-
-	const categoryAsObject = (categoryId) => {
+	const categoryAsObject = () => {
 		return (
-			{
-				"value": categoryId,
-				"label": categories.find(category => category.value === categoryId).label
-			}
+			transaction.category
+				? {
+					"value": transaction.category,
+					"label": categoriesAsOptions.find(category => category.value === transaction.category).label
+				}
+				: null
 		)
 	}
-	debugger
 
 	return (
 		<div className="transaction">
@@ -48,16 +42,20 @@ const Transaction = ({ transaction, setCategory }) => {
 			{/*<p className="transaction-description">{transaction.remarks}</p>*/}
 			<Select
 				className="transaction-category-selection"
-				options={categories}
-				selectedValue={getSelectedValue()}
+				options={categoriesAsOptions}
+				value={categoryAsObject()}
 				onChange={(event) => setCategory(transaction.id, event.value)}
 			/>
 		</div>
 	)
 }
 
-const mapDispatchToProps = dispatch => ({
-	setCategory: (transactionId, categoryId) => dispatch(setCategory(transactionId, categoryId)),
+const mapStateToProps = state => ({
+	categories: state.categories
 })
 
-export default connect(mapDispatchToProps)(Transaction)
+const mapDispatchToProps = dispatch => ({
+	setCategory: (transactionId, categoryId) => dispatch(setCategoryRequest(transactionId, categoryId)),
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Transaction)

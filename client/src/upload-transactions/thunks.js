@@ -1,68 +1,19 @@
 import {
-	createItem,
-	loadItemsFailure,
-	loadItemsInProgress,
-	loadItemsSuccess,
-	removeItem, updateItem
+	uploadSuccess
 } from "./actions"
 
-export const loadItems = () => async (dispatch) => {
+export const uploadFile = file => async dispatch => {
 	try {
-		dispatch(loadItemsInProgress())
-		const response = await fetch('/inventory')
-		const inventory = await response.json()
+		const body = new FormData()
+		body.append('transactionList', file)
 
-		dispatch(loadItemsSuccess(inventory))
-	} catch (e) {
-		dispatch(loadItemsFailure())
-		dispatch(displayAlert(e))
-	}
-}
-
-export const addItemRequest = (title, magnitude, unit, date) => async dispatch => {
-	try {
-		const body = JSON.stringify({ title, magnitude, unit, date })
-		const response = await fetch('/inventory', {
-			headers: {
-				'Content-Type': 'application/json'
-			},
+		const response = await fetch('/upload-file', {
 			method: 'post',
 			body
 		})
-		const createdItem = await response.json()
-		dispatch(createItem(createdItem))
-	} catch (e) {
-		dispatch(displayAlert(e))
-	}
-}
-
-export const updateItemRequest = (id, title, magnitude, unit, date) => async dispatch => {
-	debugger
-	try {
-		const body = JSON.stringify({ id, title, magnitude, unit, date })
-		const response = await fetch('/inventory', {
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			method: 'put',
-			body
-		})
-		const updatedItem = await response.json()
-		dispatch(updateItem(updatedItem))
-		console.log("END")
-	} catch (e) {
-		dispatch(displayAlert(e))
-	}
-}
-
-export const removeItemRequest = id => async dispatch => {
-	try {
-		const response = await fetch(`/inventory/${id}`,
-			{
-				method: 'delete'
-			})
-		const removedItem = await response.json()
-		dispatch(removeItem(removedItem))
+		const newTransactions = await response.json()
+		debugger
+		dispatch(uploadSuccess(newTransactions))
 	} catch (e) {
 		dispatch(displayAlert(e))
 	}

@@ -1,240 +1,264 @@
 {
   "transactions": [],
-  "categories": [
-    {
-      "id": "QGYbdjqLZ",
-      "name": "Wonen",
-      "parent": null
-    },
-    {
-      "id": "z7gBoeMz-",
-      "name": "Hypotheek",
-      "parent": "QGYbdjqLZ"
-    },
-    {
-      "id": "-EmA5ueNm",
-      "name": "GWL",
-      "parent": "QGYbdjqLZ"
-    },
-    {
-      "id": "AjG7phPSz",
-      "name": "Belastingen",
-      "parent": "QGYbdjqLZ"
-    },
-    {
-      "id": "K6QQJCwPn",
-      "name": "Gemeentelijk",
-      "parent": "AjG7phPSz"
-    },
-    {
-      "id": "K_K8MzXEF",
-      "name": "Waterschap",
-      "parent": "AjG7phPSz"
-    },
-    {
-      "id": "KppF2vGMA",
-      "name": "Telecom",
-      "parent": "QGYbdjqLZ"
-    },
-    {
-      "id": "a2qk0C4Oq",
-      "name": "Televisie",
-      "parent": "KppF2vGMA"
-    },
-    {
-      "id": "Bw27StR7w",
-      "name": "Internet",
-      "parent": "KppF2vGMA"
-    },
-    {
-      "id": "Ec23spM4E",
-      "name": "Huishouden",
-      "parent": "QGYbdjqLZ"
-    },
-    {
-      "id": "qoinbDPAv",
-      "name": "Woonverzekering",
-      "parent": "QGYbdjqLZ"
-    },
-    {
-      "id": "AUQl2977S",
-      "name": "Vervoer",
-      "parent": null
-    },
-    {
-      "id": "IHtOqNWvd",
-      "name": "Auto",
-      "parent": "AUQl2977S"
-    },
-    {
-      "id": "kJzqH54Bl",
-      "name": "Aanschaf",
-      "parent": "IHtOqNWvd"
-    },
-    {
-      "id": "FudzTsZUe",
-      "name": "Verzekering",
-      "parent": "IHtOqNWvd"
-    },
-    {
-      "id": "8VA2biKdi",
-      "name": "Wegenbelasting",
-      "parent": "IHtOqNWvd"
-    },
-    {
-      "id": "Km1QfbD4Q",
-      "name": "Onderhoud",
-      "parent": "IHtOqNWvd"
-    },
-    {
-      "id": "nndHm4MHd",
-      "name": "Motor",
-      "parent": "AUQl2977S"
-    },
-    {
-      "id": "KMLKNPfl9",
-      "name": "Aanschaf",
-      "parent": "nndHm4MHd"
-    },
-    {
-      "id": "ua8e_pSYG",
-      "name": "Verzekering",
-      "parent": "nndHm4MHd"
-    },
-    {
-      "id": "uKoyqCtHW",
-      "name": "Wegenbelasting",
-      "parent": "nndHm4MHd"
-    },
-    {
-      "id": "UMze8DT2w",
-      "name": "Onderhoud",
-      "parent": "nndHm4MHd"
-    },
-    {
-      "id": "0YwxtyCGl",
-      "name": "Benzine",
-      "parent": "AUQl2977S"
-    },
-    {
-      "id": "aXehtSOqH",
-      "name": "Vrije tijd",
-      "parent": null
-    },
-    {
-      "id": "mdGzeRIq2",
-      "name": "Hond",
-      "parent": null
-    },
-    {
-      "id": "FZ0C0uOXp",
-      "name": "Voer",
-      "parent": "mdGzeRIq2"
-    },
-    {
-      "id": "JKD7Z5Xql",
-      "name": "Snacks",
-      "parent": "mdGzeRIq2"
-    },
-    {
-      "id": "yIlLwQycV",
-      "name": "Benodigdheden",
-      "parent": "mdGzeRIq2"
-    },
-    {
-      "id": "PtNZbbN-5",
-      "name": "Dierenarts",
-      "parent": "mdGzeRIq2"
-    },
-    {
-      "id": "jfx-R-snM",
-      "name": "Overige uitgaven",
-      "parent": null
-    },
-    {
-      "id": "oFnUHlr_N",
-      "name": "Telefoon",
-      "parent": "KppF2vGMA"
-    },
-    {
-      "id": "pHox4K6SU",
-      "name": "Aanschaf",
-      "parent": "oFnUHlr_N"
-    },
-    {
-      "id": "XflRz4Amb",
-      "name": "Abonnement",
-      "parent": "oFnUHlr_N"
-    },
-    {
-      "id": "CemhpJE-_",
-      "name": "Medisch",
-      "parent": null
-    },
-    {
-      "id": "UutjIwki-",
-      "name": "Zorgverzekering",
-      "parent": "CemhpJE-_"
-    },
-    {
-      "id": "vBsYKwUDs",
-      "name": "Tandarts",
-      "parent": "CemhpJE-_"
-    },
-    {
-      "id": "G4l8km5s0",
-      "name": "Fysiotherapie",
-      "parent": "CemhpJE-_"
-    },
-    {
-      "id": "noqYLd0if",
-      "name": "Eigen bijdrage",
-      "parent": "CemhpJE-_"
-    },
-    {
-      "id": "HPGZBX0f_",
-      "name": "Eigen risico",
-      "parent": "CemhpJE-_"
-    },
-    {
-      "id": "uBrwWsNiq",
-      "name": "Anticonceptiepil",
-      "parent": "noqYLd0if"
-    },
-    {
-      "id": "GpyD4_cuk",
-      "name": "Sport",
-      "parent": "aXehtSOqH"
-    },
-    {
-      "id": "8BpCr93vl",
-      "name": "Cadeau's",
-      "parent": "aXehtSOqH"
-    },
-    {
-      "id": "zutYFWX5a",
-      "name": "Persoonlijke verzorging",
-      "parent": null
-    },
-    {
-      "id": "-_ipuuCTk",
-      "name": "Kleding & schoenen",
-      "parent": "zutYFWX5a"
-    },
-    {
-      "id": "7QFQNj78D",
-      "name": "Kapper",
-      "parent": "zutYFWX5a"
-    },
-    {
-      "id": "7Jr4QWiHa",
-      "name": "Lidmaatschappen, abonnement & verzekeringen",
-      "parent": null
-    },
-    {
-      "id": "4rKHaUKJ0",
-      "name": "Overlijdensverzekering",
-      "parent": "7Jr4QWiHa"
-    }
-  ]
+  "categories": {
+    "expenses": [
+      {
+        "id": "QGYbdjqLZ",
+        "name": "Wonen",
+        "parent": null
+      },
+      {
+        "id": "z7gBoeMz-",
+        "name": "Hypotheek",
+        "parent": "QGYbdjqLZ"
+      },
+      {
+        "id": "-EmA5ueNm",
+        "name": "GWL",
+        "parent": "QGYbdjqLZ"
+      },
+      {
+        "id": "AjG7phPSz",
+        "name": "Belastingen",
+        "parent": "QGYbdjqLZ"
+      },
+      {
+        "id": "K6QQJCwPn",
+        "name": "Gemeentelijk",
+        "parent": "AjG7phPSz"
+      },
+      {
+        "id": "K_K8MzXEF",
+        "name": "Waterschap",
+        "parent": "AjG7phPSz"
+      },
+      {
+        "id": "KppF2vGMA",
+        "name": "Telecom",
+        "parent": "QGYbdjqLZ"
+      },
+      {
+        "id": "a2qk0C4Oq",
+        "name": "Televisie",
+        "parent": "KppF2vGMA"
+      },
+      {
+        "id": "Bw27StR7w",
+        "name": "Internet",
+        "parent": "KppF2vGMA"
+      },
+      {
+        "id": "Ec23spM4E",
+        "name": "Huishouden",
+        "parent": "QGYbdjqLZ"
+      },
+      {
+        "id": "qoinbDPAv",
+        "name": "Woonverzekering",
+        "parent": "QGYbdjqLZ"
+      },
+      {
+        "id": "AUQl2977S",
+        "name": "Vervoer",
+        "parent": null
+      },
+      {
+        "id": "IHtOqNWvd",
+        "name": "Auto",
+        "parent": "AUQl2977S"
+      },
+      {
+        "id": "kJzqH54Bl",
+        "name": "Aanschaf",
+        "parent": "IHtOqNWvd"
+      },
+      {
+        "id": "FudzTsZUe",
+        "name": "Verzekering",
+        "parent": "IHtOqNWvd"
+      },
+      {
+        "id": "8VA2biKdi",
+        "name": "Wegenbelasting",
+        "parent": "IHtOqNWvd"
+      },
+      {
+        "id": "Km1QfbD4Q",
+        "name": "Onderhoud",
+        "parent": "IHtOqNWvd"
+      },
+      {
+        "id": "nndHm4MHd",
+        "name": "Motor",
+        "parent": "AUQl2977S"
+      },
+      {
+        "id": "KMLKNPfl9",
+        "name": "Aanschaf",
+        "parent": "nndHm4MHd"
+      },
+      {
+        "id": "ua8e_pSYG",
+        "name": "Verzekering",
+        "parent": "nndHm4MHd"
+      },
+      {
+        "id": "uKoyqCtHW",
+        "name": "Wegenbelasting",
+        "parent": "nndHm4MHd"
+      },
+      {
+        "id": "UMze8DT2w",
+        "name": "Onderhoud",
+        "parent": "nndHm4MHd"
+      },
+      {
+        "id": "0YwxtyCGl",
+        "name": "Benzine",
+        "parent": "AUQl2977S"
+      },
+      {
+        "id": "aXehtSOqH",
+        "name": "Vrije tijd",
+        "parent": null
+      },
+      {
+        "id": "mdGzeRIq2",
+        "name": "Hond",
+        "parent": null
+      },
+      {
+        "id": "FZ0C0uOXp",
+        "name": "Voer",
+        "parent": "mdGzeRIq2"
+      },
+      {
+        "id": "JKD7Z5Xql",
+        "name": "Snacks",
+        "parent": "mdGzeRIq2"
+      },
+      {
+        "id": "yIlLwQycV",
+        "name": "Benodigdheden",
+        "parent": "mdGzeRIq2"
+      },
+      {
+        "id": "PtNZbbN-5",
+        "name": "Dierenarts",
+        "parent": "mdGzeRIq2"
+      },
+      {
+        "id": "jfx-R-snM",
+        "name": "Overige uitgaven",
+        "parent": null
+      },
+      {
+        "id": "oFnUHlr_N",
+        "name": "Telefoon",
+        "parent": "KppF2vGMA"
+      },
+      {
+        "id": "pHox4K6SU",
+        "name": "Aanschaf",
+        "parent": "oFnUHlr_N"
+      },
+      {
+        "id": "XflRz4Amb",
+        "name": "Abonnement",
+        "parent": "oFnUHlr_N"
+      },
+      {
+        "id": "CemhpJE-_",
+        "name": "Medisch",
+        "parent": null
+      },
+      {
+        "id": "UutjIwki-",
+        "name": "Zorgverzekering",
+        "parent": "CemhpJE-_"
+      },
+      {
+        "id": "vBsYKwUDs",
+        "name": "Tandarts",
+        "parent": "CemhpJE-_"
+      },
+      {
+        "id": "G4l8km5s0",
+        "name": "Fysiotherapie",
+        "parent": "CemhpJE-_"
+      },
+      {
+        "id": "noqYLd0if",
+        "name": "Eigen bijdrage",
+        "parent": "CemhpJE-_"
+      },
+      {
+        "id": "HPGZBX0f_",
+        "name": "Eigen risico",
+        "parent": "CemhpJE-_"
+      },
+      {
+        "id": "uBrwWsNiq",
+        "name": "Anticonceptiepil",
+        "parent": "noqYLd0if"
+      },
+      {
+        "id": "GpyD4_cuk",
+        "name": "Sport",
+        "parent": "aXehtSOqH"
+      },
+      {
+        "id": "8BpCr93vl",
+        "name": "Cadeau's",
+        "parent": "aXehtSOqH"
+      },
+      {
+        "id": "zutYFWX5a",
+        "name": "Persoonlijke verzorging",
+        "parent": null
+      },
+      {
+        "id": "-_ipuuCTk",
+        "name": "Kleding & schoenen",
+        "parent": "zutYFWX5a"
+      },
+      {
+        "id": "7QFQNj78D",
+        "name": "Kapper",
+        "parent": "zutYFWX5a"
+      },
+      {
+        "id": "7Jr4QWiHa",
+        "name": "Lidmaatschappen, abonnement & verzekeringen",
+        "parent": null
+      },
+      {
+        "id": "4rKHaUKJ0",
+        "name": "Overlijdensverzekering",
+        "parent": "7Jr4QWiHa"
+      },
+      {
+        "id": "-_X22mmH1",
+        "name": "Trainingen",
+        "parent": "mdGzeRIq2"
+      }
+    ],
+    "income": [
+      {
+        "id": "bNjfTYOuD",
+        "name": "Werk",
+        "parent": null
+      },
+      {
+        "id": "rmZ5-MX0S",
+        "name": "Salaris",
+        "parent": "bNjfTYOuD"
+      },
+      {
+        "id": "X0cD8FMN5",
+        "name": "13e maand",
+        "parent": "bNjfTYOuD"
+      }
+    ]
+  }
 }

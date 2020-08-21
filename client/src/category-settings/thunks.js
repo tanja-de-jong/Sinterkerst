@@ -1,37 +1,56 @@
 import {
-	loadTransactionsFailure,
-	loadTransactionsInProgress,
-	loadTransactionsSuccess,
+	createCategory,
+	loadCategoriesFailure,
+	loadCategoriesInProgress,
+	loadCategoriesSuccess,
 	updateCategory
 } from "./actions"
 
-export const loadTransactions = () => async (dispatch) => {
+export const loadCategories = () => async (dispatch) => {
 	try {
-		dispatch(loadTransactionsInProgress())
-		const response = await fetch('/transactions')
-		const transactions = await response.json()
+		dispatch(loadCategoriesInProgress())
+		const response = await fetch('/categories')
+		const categories = await response.json()
 		debugger
-		dispatch(loadTransactionsSuccess(transactions))
+		dispatch(loadCategoriesSuccess(categories))
 	} catch (e) {
-		dispatch(loadTransactionsFailure())
+		dispatch(loadCategoriesFailure())
 		dispatch(displayAlert(e))
 	}
 }
 
-export const setCategory = (transactionId, categoryId) => async dispatch => {
+export const addCategoryRequest = (name, parent, expenses) => async dispatch => {
+	try {
+		const body = JSON.stringify({ name, parent, expenses })
+		const response = await fetch('/categories', {
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			method: 'post',
+			body
+		})
+		debugger
+		const createdCategory = await response.json()
+		debugger
+		dispatch(createCategory(createdCategory))
+	} catch (e) {
+		dispatch(displayAlert(e))
+	}
+}
+
+export const updateCategoryRequest = (id, name, parent, expenses) => async dispatch => {
 	debugger
 	try {
-		const body = JSON.stringify({ transactionId, categoryId })
-debugger
-		const response = await fetch('/set-category', {
+		const body = JSON.stringify({id, name, parent, expenses})
+		const response = await fetch('/categories', {
 			headers: {
 				'Content-Type': 'application/json'
 			},
 			method: 'put',
 			body
 		})
-		const updatedTransaction = await response.json()
-		dispatch(updateCategory(updatedTransaction))
+		const updatedCategory = await response.json()
+		dispatch(updateCategory(updatedCategory))
 	} catch (e) {
 		dispatch(displayAlert(e))
 	}

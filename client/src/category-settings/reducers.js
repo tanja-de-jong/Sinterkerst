@@ -1,40 +1,51 @@
 import {
-	LOAD_TRANSACTIONS_FAILURE,
-	LOAD_TRANSACTIONS_IN_PROGRESS,
-	LOAD_TRANSACTIONS_SUCCESS,
-	UPDATE_CATEGORY
+	CREATE_CATEGORY,
+	LOAD_CATEGORIES_FAILURE,
+	LOAD_CATEGORIES_IN_PROGRESS,
+	LOAD_CATEGORIES_SUCCESS, UPDATE_CATEGORY
 } from "./actions"
 
 export const isLoading = (state = false, action) => {
 	const { type } = action
 
 	switch (type) {
-		case LOAD_TRANSACTIONS_IN_PROGRESS:
+		case LOAD_CATEGORIES_IN_PROGRESS:
 			return true
-		case LOAD_TRANSACTIONS_SUCCESS:
-		case LOAD_TRANSACTIONS_FAILURE:
+		case LOAD_CATEGORIES_SUCCESS:
+		case LOAD_CATEGORIES_FAILURE:
 			return false
 		default:
 			return state
 	}
 }
 
-export const transactions = (state = [], action) => {
+export const categories = (state = [], action) => {
 	const { type, payload } = action
 
 	switch (type) {
+		case CREATE_CATEGORY: {
+			const { category } = payload
+			return state.concat(category)
+		}
+
 		case UPDATE_CATEGORY: {
-			// TODO
-			return payload
+			debugger
+			const {category: categoryToUpdate} = payload
+			return state.map(category => {
+				if (category.id === categoryToUpdate.id) {
+					return categoryToUpdate
+				}
+				return category
+			})
+		}
+		
+		case LOAD_CATEGORIES_SUCCESS: {
+			const {categories} = payload
+			return categories
 		}
 
-		case LOAD_TRANSACTIONS_SUCCESS: {
-			const {inventory} = payload
-			return inventory
-		}
-
-		case LOAD_TRANSACTIONS_IN_PROGRESS:
-		case LOAD_TRANSACTIONS_FAILURE:
+		case LOAD_CATEGORIES_IN_PROGRESS:
+		case LOAD_CATEGORIES_FAILURE:
 		default:
 			return state
 	}
