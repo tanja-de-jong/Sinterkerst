@@ -11,7 +11,7 @@ CREATE TABLE transactions (
   date DATE,
   description TEXT,
   account INT NOT NULL,
-  otherAccount TEXT50
+  otherAccount TEXT,
   code CHAR(2),
   amount REAL,
   mutation TEXT,
@@ -135,7 +135,7 @@ INSERT INTO categories (name) VALUES ('Overige');
 INSERT INTO categories (name) VALUES ('Spaarrekening');
 INSERT INTO categories (name) VALUES ('Ongecategoriseerd');
 INSERT INTO categories (name) VALUES ('Van/naar gezamenlijk');
-INSERT INTO categories (name) VALUES ('Lening')
+INSERT INTO categories (name) VALUES ('Lening');
 
 
 INSERT INTO transactions (date, description, account, otheraccount, code, amount, mutation, remarks, category) values (to_date('20200820', 'YYYYMMDD'), 'AHWallerbosch GROENLO NLD', 0, '', 'BA', -0.79, 'Betaalautomaat', 'Pasvolgnr: 900 19-08-2020 12:46 Transactie: 13X7T0 Term: 701SHN Valutadatum: 20-08-2020', 83);
