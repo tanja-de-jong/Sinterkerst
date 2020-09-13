@@ -3,7 +3,7 @@ import {loadTransactions} from "./thunks"
 import {connect} from "react-redux"
 import {allTransactions, transactionsLoading} from "./selectors"
 
-const Dashboard = ({ transactions = [] }) => {
+const Dashboard = () => {
 
 	return (
 		<div>
@@ -12,11 +12,4 @@ const Dashboard = ({ transactions = [] }) => {
 	)
 }
 
-const mapStateToProps = state => ({
-	transactions: allTransactions(state),
-	isLoading: transactionsLoading(state)
-})
-
-export default connect(
-	mapStateToProps
-)(Dashboard)
+export default Dashboard
