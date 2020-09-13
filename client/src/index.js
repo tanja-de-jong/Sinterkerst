@@ -12,7 +12,7 @@ const persistor = persistStore(store)
 
 ReactDOM.render(
   <Auth0Provider
-    deomain="twilight-snowflake-4165.us.auth0.com"
+    domain="twilight-snowflake-4165.us.auth0.com"
     clientId="ouNiX97PZu371wUNRB0Z7LGzPrcFoYcl"
     redirectUri={window.location.origin}
   >
