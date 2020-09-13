@@ -2,17 +2,18 @@ import React, {useState} from 'react'
 import {addCategoryRequest, updateCategoryRequest} from "./thunks"
 import {connect} from "react-redux"
 import Select from "react-select"
+import CategorySelector from "../transactions/CategorySelector"
 
-const AddOrUpdateCategory = ({ category, categories, addCategory, updateCategory, expenses }) => {
+const AddOrUpdateCategory = ({ category, categories, addCategory, updateCategory }) => {
 
 	const [name, setName] = useState(category ? category.name : "")
 	const [parent, setParent] = useState(category ? category.parent || null : null)
 
 	const onSubmitPressed = () => {
 		category ?
-			updateCategory(category.id, name, parent, expenses)
+			updateCategory(category.id, name, parent)
 			:
-			addCategory(name, parent, expenses)
+			addCategory(name, parent)
 	}
 
 	const categoriesAsOptions = categories.map(category => {
@@ -43,12 +44,14 @@ const AddOrUpdateCategory = ({ category, categories, addCategory, updateCategory
 				<input type="text" name="name" value={name} onChange={e => setName(e.target.value)} />
 			</label>
 
-			<Select
-				className="category-parent-selection"
-				options={categoriesAsOptions}
-				value={parentAsObject()}
-				onChange={(event) => setParent(event.value)}
-			/>
+			<CategorySelector selected={parent} onSelect={setParent} />
+
+			{/*<Select*/}
+			{/*	className="category-parent-selection"*/}
+			{/*	options={categoriesAsOptions}*/}
+			{/*	value={parentAsObject()}*/}
+			{/*	onChange={(event) => setParent(event.value)}*/}
+			{/*/>*/}
 
 			<input type="submit" value="Submit" />
 		</form>
@@ -56,8 +59,8 @@ const AddOrUpdateCategory = ({ category, categories, addCategory, updateCategory
 }
 
 const mapDispatchToProps = dispatch => ({
-	addCategory: (name, parent, expenses) => dispatch(addCategoryRequest(name, parent, expenses)),
-	updateCategory: (id, name, parent, expenses) => dispatch(updateCategoryRequest(id, name, parent, expenses)),
+	addCategory: (name, parent) => dispatch(addCategoryRequest(name, parent)),
+	updateCategory: (id, name, parent) => dispatch(updateCategoryRequest(id, name, parent)),
 })
 
 export default connect(null, mapDispatchToProps)(AddOrUpdateCategory)

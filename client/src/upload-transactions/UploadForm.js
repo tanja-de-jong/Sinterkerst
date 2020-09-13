@@ -1,9 +1,10 @@
 import React, {useState} from 'react'
-import {uploadFile} from "./thunks"
 import {connect} from "react-redux"
-import TransactionList from "../show-transactions/TransactionList"
-import {clearNewTransactions} from "./actions"
+import TransactionList from "../transactions/TransactionList"
 import {Link} from "react-router-dom"
+import {newTransactions} from "../transactions/selectors"
+import {uploadFile} from "../transactions/thunks"
+import {clearNewTransactions} from "../transactions/actions"
 
 const UploadForm = ({ uploadFile, newTransactions, clearNewTransactions }) => {
 
@@ -31,12 +32,11 @@ const UploadForm = ({ uploadFile, newTransactions, clearNewTransactions }) => {
 				</div>
 			)
 
-debugger
 	return content
 }
 
 const mapStateToProps = state => ({
-	newTransactions: state.newTransactions
+	newTransactions: newTransactions(state)
 })
 
 

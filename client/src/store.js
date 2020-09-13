@@ -3,15 +3,15 @@ import { persistReducer} from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 import autoMergeLevel2 from "redux-persist/lib/stateReconciler/autoMergeLevel2"
 import thunk from 'redux-thunk'
-import {uploadTransactions} from "./upload-transactions/reducers"
 import {composeWithDevTools} from "redux-devtools-extension"
-import {transactions} from "./show-transactions/reducers"
-import {categories} from "./category-settings/reducers"
+import {transactions} from "./transactions/reducers"
+import {categories} from "./categories/reducers"
+import {rules} from "./rules/reducers"
 
 const reducers = {
-	newTransactions: uploadTransactions,
 	transactions: transactions,
 	categories: categories,
+	rules: rules
 }
 
 const persistConfig = {

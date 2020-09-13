@@ -4,6 +4,18 @@ export const setCategory = (updatedTransaction) => ({
 	payload: updatedTransaction
 })
 
+export const GET_PAGES = 'GET_PAGES'
+export const getPages = (pages) => ({
+	type: GET_PAGES,
+	payload: pages
+})
+
+export const GET_AMOUNTS = 'GET_AMOUNTS'
+export const getAmounts = (amounts) => ({
+	type: GET_AMOUNTS,
+	payload: amounts
+})
+
 export const LOAD_TRANSACTIONS_IN_PROGRESS = 'LOAD_TRANSACTIONS_IN_PROGRESS'
 export const loadTransactionsInProgress = () => ({
 	type: LOAD_TRANSACTIONS_IN_PROGRESS
@@ -18,4 +30,15 @@ export const loadTransactionsSuccess = inventory => ({
 export const LOAD_TRANSACTIONS_FAILURE = 'LOAD_TRANSACTIONS_FAILURE'
 export const loadTransactionsFailure = () => ({
 	type: LOAD_TRANSACTIONS_FAILURE
+})
+
+export const UPLOAD_SUCCESS = 'UPLOAD_SUCCESS'
+export const uploadSuccess = (transactions) => ({
+	type: UPLOAD_SUCCESS,
+	payload: transactions
+})
+
+export const CLEAR_NEW_TRANSACTIONS = 'CLEAR_NEW_TRANSACTIONS'
+export const clearNewTransactions = () => ({
+	type: CLEAR_NEW_TRANSACTIONS,
 })

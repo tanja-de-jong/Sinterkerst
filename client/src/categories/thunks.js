@@ -11,7 +11,6 @@ export const loadCategories = () => async (dispatch) => {
 		dispatch(loadCategoriesInProgress())
 		const response = await fetch('/categories')
 		const categories = await response.json()
-		debugger
 		dispatch(loadCategoriesSuccess(categories))
 	} catch (e) {
 		dispatch(loadCategoriesFailure())
@@ -19,9 +18,9 @@ export const loadCategories = () => async (dispatch) => {
 	}
 }
 
-export const addCategoryRequest = (name, parent, expenses) => async dispatch => {
+export const addCategoryRequest = (name, parent) => async dispatch => {
 	try {
-		const body = JSON.stringify({ name, parent, expenses })
+		const body = JSON.stringify({ name, parent })
 		const response = await fetch('/categories', {
 			headers: {
 				'Content-Type': 'application/json'
@@ -29,19 +28,16 @@ export const addCategoryRequest = (name, parent, expenses) => async dispatch => 
 			method: 'post',
 			body
 		})
-		debugger
 		const createdCategory = await response.json()
-		debugger
 		dispatch(createCategory(createdCategory))
 	} catch (e) {
 		dispatch(displayAlert(e))
 	}
 }
 
-export const updateCategoryRequest = (id, name, parent, expenses) => async dispatch => {
-	debugger
+export const updateCategoryRequest = (id, name, parent) => async dispatch => {
 	try {
-		const body = JSON.stringify({id, name, parent, expenses})
+		const body = JSON.stringify({id, name, parent})
 		const response = await fetch('/categories', {
 			headers: {
 				'Content-Type': 'application/json'
