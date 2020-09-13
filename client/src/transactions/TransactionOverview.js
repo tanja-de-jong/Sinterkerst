@@ -4,6 +4,7 @@ import {applyRules, loadTransactions} from "./thunks"
 import {connect} from "react-redux"
 import {allTransactions} from "./selectors"
 import CategorySelector from "./CategorySelector"
+import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
 
 const TransactionOverview = ({ transactions = [], applyRules, startLoadingTransactions }) => {
 	useEffect(() => {
@@ -26,4 +27,6 @@ const mapDispatchToProps = dispatch => ({
 	startLoadingTransactions: () => dispatch(loadTransactions(1)),
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(TransactionOverview)
+export default connect(mapStateToProps, mapDispatchToProps)(withAuthenticationRequired(TransactionOverview, {
+	onRedirecting: () => "Loading...",
+}))

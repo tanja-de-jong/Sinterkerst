@@ -52,7 +52,6 @@ const App = ({ categoriesLoading, rulesLoading, startLoadingCategories, startLoa
             </ul>
           </nav>
 
-          <LoginButton/>
           {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
           <Switch>
@@ -68,8 +67,11 @@ const App = ({ categoriesLoading, rulesLoading, startLoadingCategories, startLoa
             <Route path="/settings">
               <Settings/>
             </Route>
-            <Route path="/">
+            <Route path="/login">
               <Dashboard/>
+            </Route>
+            <Route path="/">
+              <TransactionOverview/>
             </Route>
           </Switch>
         </div>
@@ -92,9 +94,3 @@ const mapDispatchToProps = dispatch => ({
 
 const ConnectedApp = connect(mapStateToProps, mapDispatchToProps)(App)
 export default hot(module)(ConnectedApp);
-
-const LoginButton = () => {
-  const { loginWithRedirect } = useAuth0();
-
-  return <button onClick={() => loginWithRedirect()}>Log In</button>;
-};

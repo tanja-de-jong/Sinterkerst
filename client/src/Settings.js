@@ -1,6 +1,7 @@
 import React from 'react'
 import CategorySettings from "./categories/CategorySettings"
 import RulesSettings from "./rules/RulesSettings"
+import {withAuthenticationRequired} from "@auth0/auth0-react"
 
 const Settings = () => {
 	return (
@@ -11,4 +12,6 @@ const Settings = () => {
 	)
 }
 
-export default Settings
+export default withAuthenticationRequired(Settings, {
+	onRedirecting: () => "Loading...",
+})

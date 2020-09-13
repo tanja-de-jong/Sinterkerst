@@ -9,6 +9,7 @@ import {
 	loadTransactionsNoPagination
 } from "../transactions/thunks"
 import CategorySelector from "../transactions/CategorySelector"
+import {withAuthenticationRequired} from "@auth0/auth0-react"
 
 const IncomeExpensesDashboard = ({ allCategories = [], transactions = [], amounts, getAmounts, startLoadingTransactions }) => {
 
@@ -172,4 +173,6 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(IncomeExpensesDashboard)
+)(withAuthenticationRequired(IncomeExpensesDashboard, {
+	onRedirecting: () => "Loading...",
+}))

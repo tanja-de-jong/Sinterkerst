@@ -5,6 +5,7 @@ import {Link} from "react-router-dom"
 import {newTransactions} from "../transactions/selectors"
 import {uploadFile} from "../transactions/thunks"
 import {clearNewTransactions} from "../transactions/actions"
+import {withAuthenticationRequired} from "@auth0/auth0-react"
 
 const UploadForm = ({ uploadFile, newTransactions, clearNewTransactions }) => {
 
@@ -45,4 +46,6 @@ const mapDispatchToProps = dispatch => ({
 	clearNewTransactions: () => dispatch(clearNewTransactions()),
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(UploadForm)
+export default connect(mapStateToProps, mapDispatchToProps)(withAuthenticationRequired(UploadForm, {
+	onRedirecting: () => "Loading...",
+}))
