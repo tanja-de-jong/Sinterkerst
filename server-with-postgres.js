@@ -183,23 +183,23 @@ const getAccounts = (request, response) => {
 }
 
 app
-	.route('/pages')
+	.route('/api/pages')
 	.get(getPages)
 
-app.route('/transactions')
+app.route('/api/transactions')
 	.get(getTransactions)
 
-app.route('/transactions/set-category')
+app.route('/api/transactions/set-category')
 	.put(setCategory)
 
 	// .route('/amounts')
 
-app.route('/categories')
+app.route('/api/categories')
 	.get(getCategories)
 	.put(updateCategory)
 	.post(postCategory)
 
-app.route('/rules')
+app.route('/api/rules')
 	.get(getRules)
 	.put(updateRule)
 	.post(postRule)
@@ -207,7 +207,7 @@ app.route('/rules')
 	// .route('/rules')
 	// .route('/apply_rules')
 
-app.route('/account')
+app.route('/api/account')
 	.get(getAccounts)
 
 
