@@ -1,5 +1,5 @@
 const express = require('express');
-// const path = require('path');
+const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors')
 const {pool} = require('./config')
@@ -7,7 +7,7 @@ const {pool} = require('./config')
 const app = express();
 
 // Serve static files from the React app
-// app.use(express.static(path.join(__dirname, 'client/build')));
+app.use(express.static(path.join(__dirname, 'client/build')));
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
