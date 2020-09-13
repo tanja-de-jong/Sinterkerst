@@ -8,7 +8,7 @@ import {
 export const loadRules = () => async (dispatch) => {
 	try {
 		dispatch(loadRulesInProgress())
-		const response = await fetch('/rules')
+		const response = await fetch('/api/rules')
 		const rules = await response.json()
 		dispatch(loadRulesSuccess(rules))
 	} catch (e) {
@@ -30,7 +30,7 @@ export const addRuleRequest = (description, category, field, text) => async disp
 			],
 			category
 		})
-		const response = await fetch('/rules', {
+		const response = await fetch('/api/rules', {
 			headers: {
 				'Content-Type': 'application/json'
 			},
@@ -47,7 +47,7 @@ export const addRuleRequest = (description, category, field, text) => async disp
 export const updateRuleRequest = (id, description, parent, type) => async dispatch => {
 	try {
 		const body = JSON.stringify({id, description, parent, type})
-		const response = await fetch('/rules', {
+		const response = await fetch('/api/rules', {
 			headers: {
 				'Content-Type': 'application/json'
 			},

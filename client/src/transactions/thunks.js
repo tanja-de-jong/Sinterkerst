@@ -12,7 +12,7 @@ export const uploadFile = file => async dispatch => {
 		const body = new FormData()
 		body.append('transactionList', file)
 
-		const response = await fetch('/upload-file', {
+		const response = await fetch('/api/upload-file', {
 			method: 'post',
 			body
 		})
@@ -25,7 +25,7 @@ export const uploadFile = file => async dispatch => {
 
 export const getPagesRequest = (category) => async (dispatch) => {
 	try {
-		let url = "/pages"
+		let url = "/api/pages"
 		if (category) url = url + '?category=' + category
 		debugger
 		const response = await fetch(url)
@@ -38,7 +38,7 @@ export const getPagesRequest = (category) => async (dispatch) => {
 
 export const getAmountsRequest = (categories) => async (dispatch) => {
 	try {
-		const response = await fetch("/transactions/amount?categories=" + categories)
+		const response = await fetch("/api/transactions/amount?categories=" + categories)
 		const amounts = await response.json()
 		dispatch(getAmounts(amounts))
 	} catch (e) {
@@ -50,7 +50,7 @@ export const loadTransactions = (page, category) => async (dispatch) => {
 	debugger
 	try {
 		dispatch(loadTransactionsInProgress())
-		let url = "/transactions?page=" + page
+		let url = "/api/transactions?page=" + page
 		if (category) url += "&category=" + category
 		debugger
 		const response = await fetch(url)
@@ -65,7 +65,7 @@ export const loadTransactions = (page, category) => async (dispatch) => {
 export const loadTransactionsNoPagination = (category) => async (dispatch) => {
 	try {
 		dispatch(loadTransactionsInProgress())
-		let url = "/transactions"
+		let url = "/api/transactions"
 		if (category) url += "?category=" + category
 		debugger
 		const response = await fetch(url)
@@ -80,7 +80,7 @@ export const loadTransactionsNoPagination = (category) => async (dispatch) => {
 export const setCategoryRequest = (transactionId, categoryId) => async dispatch => {
 	try {
 		const body = JSON.stringify({ transactionId, categoryId })
-		const response = await fetch('/set-category', {
+		const response = await fetch('/api/set-category', {
 			headers: {
 				'Content-Type': 'application/json'
 			},
@@ -98,7 +98,7 @@ export const applyRules = () => async (dispatch) => {
 	debugger
 	try {
 		const body = JSON.stringify({ "uncategorizedOnly": true })
-		const response = await fetch('/apply_rules', {
+		const response = await fetch('/api/apply_rules', {
 			headers: {
 				'Content-Type': 'application/json'
 			},

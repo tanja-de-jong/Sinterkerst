@@ -9,7 +9,7 @@ import {
 export const loadCategories = () => async (dispatch) => {
 	try {
 		dispatch(loadCategoriesInProgress())
-		const response = await fetch('/categories')
+		const response = await fetch('/api/categories')
 		const categories = await response.json()
 		dispatch(loadCategoriesSuccess(categories))
 	} catch (e) {
@@ -21,7 +21,7 @@ export const loadCategories = () => async (dispatch) => {
 export const addCategoryRequest = (name, parent) => async dispatch => {
 	try {
 		const body = JSON.stringify({ name, parent })
-		const response = await fetch('/categories', {
+		const response = await fetch('/api/categories', {
 			headers: {
 				'Content-Type': 'application/json'
 			},
@@ -38,7 +38,7 @@ export const addCategoryRequest = (name, parent) => async dispatch => {
 export const updateCategoryRequest = (id, name, parent) => async dispatch => {
 	try {
 		const body = JSON.stringify({id, name, parent})
-		const response = await fetch('/categories', {
+		const response = await fetch('/api/categories', {
 			headers: {
 				'Content-Type': 'application/json'
 			},
