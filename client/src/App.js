@@ -20,6 +20,7 @@ import {loadCategories} from "./categories/thunks"
 import {transactionsLoading} from "./transactions/selectors"
 import {categoriesLoading} from "./categories/selectors"
 import {rulesLoading} from "./rules/selectors"
+import { useAuth0 } from "@auth0/auth0-react";
 
 const App = ({ categoriesLoading, rulesLoading, startLoadingCategories, startLoadingRules }) => {
   useEffect(() => {
@@ -51,6 +52,7 @@ const App = ({ categoriesLoading, rulesLoading, startLoadingCategories, startLoa
             </ul>
           </nav>
 
+          <LoginButton/>
           {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
           <Switch>
@@ -90,3 +92,9 @@ const mapDispatchToProps = dispatch => ({
 
 const ConnectedApp = connect(mapStateToProps, mapDispatchToProps)(App)
 export default hot(module)(ConnectedApp);
+
+const LoginButton = () => {
+  const { loginWithRedirect } = useAuth0();
+
+  return <button onClick={() => loginWithRedirect()}>Log In</button>;
+};
