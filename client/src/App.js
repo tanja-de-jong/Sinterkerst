@@ -9,18 +9,14 @@ import {
   Link
 } from "react-router-dom";
 import Dashboard from "./transactions/Dashboard"
-import CategorySettings from "./categories/CategorySettings"
 import TransactionOverview from "./transactions/TransactionOverview"
 import IncomeExpensesDashboard from "./income-expenses/IncomeExpensesDashboard"
 import Settings from "./Settings"
 import {loadRules} from "./rules/thunks"
 import {connect} from "react-redux"
-import {loadTransactions} from "./transactions/thunks"
 import {loadCategories} from "./categories/thunks"
-import {transactionsLoading} from "./transactions/selectors"
 import {categoriesLoading} from "./categories/selectors"
 import {rulesLoading} from "./rules/selectors"
-import { useAuth0 } from "@auth0/auth0-react";
 
 const App = ({ categoriesLoading, rulesLoading, startLoadingCategories, startLoadingRules }) => {
   useEffect(() => {

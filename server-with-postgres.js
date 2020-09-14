@@ -77,6 +77,95 @@ const setCategory = (request, response) => {
 		})
 }
 
+const uploadFile = async (request, response) => {
+	console.log("API: Upload file")
+	csv({headers: ["date", "description", "account", "otheraccount", "code", "debitOrCredit", "amount", "mutation", "remarks"]})
+		.fromFile(req.file.path)
+		.then(async (json) => {
+			if (json.length > 0) {
+				const account = json[0].account
+				// const lastUpdated = db.get('accounts').find({iban: account}).value().updated
+				const lastUpdated = await pool.query('SELECT * FROM accounts WHERE iban = $1', [account])
+				let newLastUpdated = lastUpdated
+
+				const existingTransactions = []
+				const newTransactions = []
+				await json.forEach(transaction => {
+					// Process fields
+					if (transaction.debitOrCredit === "Af") {
+						transaction.amount = "-" + transaction.amount
+					}
+
+					// Check if transaction exists
+					pool.query(
+						'SELECT id FROM transactions WHERE date = $1 AND description = $2 AND ' +
+						'account = $3 AND otheraccount = $4 AND code = $5 AND amount = $6 AND mutation = $7 ' +
+						'AND remarks = $8 LIMIT 1)', [
+							transaction.date,
+							transaction.description,
+							transaction.account,
+							transaction.otheraccount,
+							transaction.code,
+							transaction.amount,
+							transaction.mutation,
+							transaction.remarks
+						], (error, results) => {
+							if (error) {
+								throw error
+							}
+
+							if (results.rows.length > 0) {	// Transaction already exists, so don't add again
+								existingTransactions.push(results.rows[0].id)
+							} else {										// Transaction doesn't exist yet, so add it
+								// Set the last updated date of the account to the date of the newest transaction
+								if (transaction.date > newLastUpdated) {
+									newLastUpdated = transaction.date
+								}
+
+								// Apply rules
+								const categories = applyRules(transaction)
+								if (categories.length === 1) {
+									transaction.category = categories[0]
+								} else {
+									transaction.category = "22ofrnfYO"	// Ongecategoriseerd
+									if (categories.length > 0) {
+										console.log("Transaction " + transaction.id + " has multiple categories: " + categories)
+									}
+								}
+								pool.query('INSERT INTO transactions (date, description, account, otheraccount, code, amount, mutation, remarks, category) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *',
+									[transaction.date, transaction.description, transaction.account, transaction.otheraccount, transaction.code, transaction.amount, transaction.mutation, transaction.remarks, transaction.category],
+									(error, results) => {
+										if (error) {
+											throw error
+										}
+
+										newTransactions.push(results.rows[0])
+									}
+								)
+							}
+						})
+				})
+
+				pool.query(
+					'UPDATE accounts SET updated = $1 WHERE iban = $2 RETURNING *',
+					[newLastUpdated, account],
+					(error, results) => {
+						if (error) {
+							console.log("Couldn't update 'last updated' for account " + account)
+							throw error
+						}
+					})
+
+				if (existingTransactions.length > 0) {
+					console.log("Transactions already exist:")
+					console.log(existingTransactions.map(t => t.id))
+				}
+
+				response.status(200).json(newTransactions)
+			}
+		})
+});
+
 
 // CATEGORIES
 const getCategories = (request, response) => {
