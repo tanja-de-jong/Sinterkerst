@@ -1,6 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import Select from "react-select"
+import Autocomplete from '@material-ui/lab/Autocomplete';
 import styled from 'styled-components'
 import {
 	allCategories,
@@ -8,66 +8,28 @@ import {
 	incomeCategories,
 	savingsCategories
 } from "../categories/selectors"
+import TextField from "@material-ui/core/TextField"
+import Filter from "./Filter"
 
-const CategorySelector = ({ selected, debitOrCredit, incomeCategories, expensesCategories, savingsCategories, allCategories, onSelect }) => {
+const CategorySelector = ({ incomeCategories, expensesCategories, savingsCategories, allCategories, selected, onSelect }) => {
+	const createOptions = (group, categories) => {
+		return categories.map(category => {
+			return { ...category, group: group }
+		})
+	}
+
 	const categoriesAsOptions = () => {
-		const createLabel = (categories, category) => {
-			const parent = categories.find(parent => parent.id === category.parent)
-			return category.name + (parent ?  " (" + parent.name + ")" : "")
-		}
+		const expensesOptions = createOptions("Uitgaven", expensesCategories)
+		const incomeOptions = createOptions("Inkomsten", incomeCategories)
+		const otherOptions = createOptions("Overige", savingsCategories)
 
-		const createOptions = (categories) => {
-			return categories.map(category => {
-				return {
-					"value": category.id,
-					"label": createLabel(categories, category)
-				}
-			})
-		}
-
-		const expensesOptions = {
-			"label": "Uitgaven",
-			"options": createOptions(expensesCategories)
-		}
-
-		const incomeOptions = {
-			"label": "Inkomsten",
-			"options": createOptions(incomeCategories)
-		}
-
-		const savingsOptions = {
-			"label": "Sparen",
-			"options": createOptions(savingsCategories)
-		}
-
-		return debitOrCredit === "Bij" ? [ incomeOptions, expensesOptions, savingsOptions ] : [ expensesOptions, incomeOptions, savingsOptions ]
+		return expensesOptions.concat(incomeOptions).concat(otherOptions)
 	}
 
-	const categoryAsObject = () => {
-		debugger
-		return (
-			selected
-				? {
-					"value": selected,
-					"label": allCategories.find(category => category.id === selected).name
-				}
-				: null
-		)
-	}
-
-	const SelectDiv = styled.div`
-		width: 200px;
-	`
+	const options = categoriesAsOptions()
 
 	return (
-		<SelectDiv>
-			<Select
-				className="category-selection"
-				options={categoriesAsOptions()}
-				value={categoryAsObject()}
-				onChange={(event) => onSelect(event.value, event.label)}
-			/>
-		</SelectDiv>
+		<Filter label="Categorie" options={options} selected={allCategories.find(cat => cat.id === selected)} handleChange={onSelect} group={true} />
 	)
 }
 

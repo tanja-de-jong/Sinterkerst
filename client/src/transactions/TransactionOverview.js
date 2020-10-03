@@ -6,27 +6,16 @@ import {allTransactions} from "./selectors"
 import CategorySelector from "./CategorySelector"
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
 
-const TransactionOverview = ({ transactions = [], applyRules, startLoadingTransactions }) => {
-	useEffect(() => {
-		startLoadingTransactions()
-	}, [])
+const TransactionOverview = ({ transactions = [], applyRules }) => {
 
-
-	return <div>
-		<button onClick={applyRules}>Regels uitvoeren</button>
-		<TransactionList transactions={transactions}  />
-	</div>
+	return <TransactionList />
+	{/*<button onClick={applyRules}>Regels uitvoeren</button>*/}
 }
 
-const mapStateToProps = state => ({
-	transactions: allTransactions(state),
-})
-
 const mapDispatchToProps = dispatch => ({
-	applyRules: () => dispatch(applyRules()),
-	startLoadingTransactions: () => dispatch(loadTransactions(1)),
+	applyRules: () => dispatch(applyRules())
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(withAuthenticationRequired(TransactionOverview, {
+export default connect(null, mapDispatchToProps)(withAuthenticationRequired(TransactionOverview, {
 	onRedirecting: () => "Loading...",
 }))

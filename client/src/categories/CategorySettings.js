@@ -1,6 +1,6 @@
 import React from 'react'
 import CategoryList from "./CategoryList"
-import AddOrEditCategory from "./AddOrEditCategory"
+import AddOrEditCategory from "./AddOrUpdateCategory"
 import {connect} from "react-redux"
 import { transactionsLoading } from "../transactions/selectors"
 import {
@@ -26,7 +26,7 @@ const CategorySettings = ({ expensesCategories, incomeCategories, savingsCategor
 			</div>
 		)
 	}
-debugger
+
 	return (
 		<div>
 			<h1>Category settings</h1>

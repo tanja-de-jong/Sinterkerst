@@ -3,6 +3,9 @@ import {addCategoryRequest, updateCategoryRequest} from "./thunks"
 import {connect} from "react-redux"
 import Select from "react-select"
 import CategorySelector from "../transactions/CategorySelector"
+import TextField from "@material-ui/core/TextField"
+import Button from "@material-ui/core/Button"
+import DeleteIcon from "@material-ui/core/SvgIcon/SvgIcon"
 
 const AddOrUpdateCategory = ({ category, categories, addCategory, updateCategory }) => {
 
@@ -16,45 +19,15 @@ const AddOrUpdateCategory = ({ category, categories, addCategory, updateCategory
 			addCategory(name, parent)
 	}
 
-	const categoriesAsOptions = categories.map(category => {
-		const parent = categories.find(parent => parent.id === category.parent)
-		let label = category.name
-		if (parent) {
-			label = label + " (" + parent.name + ")"
-		}
-		return {
-			"value": category.id,
-			"label": label
-		}
-	})
-
-	const parentAsObject = () => {
-		return parent !== null
-		? {
-			"value": parent,
-			"label": categories.find(category => category.id === parent).name
-		}
-		: null
-	}
-
 	return (
-		<form onSubmit={onSubmitPressed}>
-			<label>
-				Naam:
-				<input type="text" name="name" value={name} onChange={e => setName(e.target.value)} />
-			</label>
+		<div>
+			<TextField id="outlined-basic" label="Naam" variant="outlined" onChange={e => setName(e.target.value)} value={name}/>
 
 			<CategorySelector selected={parent} onSelect={setParent} />
 
-			{/*<Select*/}
-			{/*	className="category-parent-selection"*/}
-			{/*	options={categoriesAsOptions}*/}
-			{/*	value={parentAsObject()}*/}
-			{/*	onChange={(event) => setParent(event.value)}*/}
-			{/*/>*/}
-
-			<input type="submit" value="Submit" />
-		</form>
+			<Button variant="contained" onClick={onSubmitPressed}>Opslaan</Button>
+			<DeleteIcon onClick={() => console.log("TODO: delete this category")}/>
+		</div>
 	)
 }
 

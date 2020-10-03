@@ -7,11 +7,13 @@ import {composeWithDevTools} from "redux-devtools-extension"
 import {transactions} from "./transactions/reducers"
 import {categories} from "./categories/reducers"
 import {rules} from "./rules/reducers"
+import {accounts} from "./accounts/reducers"
 
 const reducers = {
 	transactions: transactions,
 	categories: categories,
-	rules: rules
+	rules: rules,
+	accounts: accounts,
 }
 
 const persistConfig = {

@@ -6,13 +6,14 @@ import {
 	loadTransactionsSuccess,
 	setCategory, uploadSuccess
 } from "./actions"
+import {apiFetch} from "../helper"
 
 export const uploadFile = file => async dispatch => {
 	try {
 		const body = new FormData()
 		body.append('transactionList', file)
 
-		const response = await fetch('/api/upload-file', {
+		const response = await apiFetch('/api/transactions/upload', {
 			method: 'post',
 			body
 		})
@@ -27,8 +28,8 @@ export const getPagesRequest = (category) => async (dispatch) => {
 	try {
 		let url = "/api/pages"
 		if (category) url = url + '?category=' + category
-		debugger
-		const response = await fetch(url)
+
+		const response = await apiFetch(url)
 		const pages = await response.json()
 		dispatch(getPages(pages))
 	} catch (e) {
@@ -36,9 +37,25 @@ export const getPagesRequest = (category) => async (dispatch) => {
 	}
 }
 
-export const getAmountsRequest = (categories) => async (dispatch) => {
+// Deprecated
+export const getRowsRequest = (category) => async (dispatch) => {
 	try {
-		const response = await fetch("/api/transactions/amount?categories=" + categories)
+		let url = "/api/transactions/rows"
+		console.log("Category")
+		console.log(category)
+		if (category) url = url + '?category=' + category
+
+		const response = await apiFetch(url)
+		const rows = await response.json()
+		return rows
+	} catch (e) {
+		dispatch(displayAlert(e))
+	}
+}
+
+export const getAmountsRequest = (accounts, categories) => async (dispatch) => {
+	try {
+		const response = await apiFetch("/api/transactions/amounts?accounts=" + accounts + "&categories=" + categories)
 		const amounts = await response.json()
 		dispatch(getAmounts(amounts))
 	} catch (e) {
@@ -46,14 +63,29 @@ export const getAmountsRequest = (categories) => async (dispatch) => {
 	}
 }
 
-export const loadTransactions = (page, category) => async (dispatch) => {
-	debugger
+export const getAmountRequest = (category) => async (dispatch) => {
+	try {
+		const response = await apiFetch("/api/transactions/amount?category=" + category)
+		const amount = await response.json()
+		return amount
+	} catch (e) {
+		dispatch(displayAlert(e))
+	}
+}
+
+export const loadTransactions = (page, category, limit, account, token) => async (dispatch) => {
+	console.log("Load transactions")
 	try {
 		dispatch(loadTransactionsInProgress())
 		let url = "/api/transactions?page=" + page
 		if (category) url += "&category=" + category
-		debugger
-		const response = await fetch(url)
+		if (limit) url += "&limit=" + limit
+		if (account !== undefined) url += "&account=" + account
+		const response = await apiFetch(url, {
+			headers: {
+				Authorization: 'Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InBpeGZSSEZXdTBFTWVSTEhkbzd4UCJ9.eyJpc3MiOiJodHRwczovL3R3aWxpZ2h0LXNub3dmbGFrZS00MTY1LnVzLmF1dGgwLmNvbS8iLCJzdWIiOiJyU28xZjdXSEc2ekVpZGJabU55cFVQbHZscTE5U3IxVkBjbGllbnRzIiwiYXVkIjoidGFuamEtbW9uZXktbWFuYWdlci5oZXJva3UuY29tIiwiaWF0IjoxNjAxNzMyOTA5LCJleHAiOjE2MDE4MTkzMDksImF6cCI6InJTbzFmN1dIRzZ6RWlkYlptTnlwVVBsdmxxMTlTcjFWIiwiZ3R5IjoiY2xpZW50LWNyZWRlbnRpYWxzIn0.F-PofdQeSBNUUB_n7CnUyW6fby4ca7Orj-gs-R7LZIP5VEfn2IttMCu3YuBJPgkMNCR4T0SPtgkCb_TcNqE8-N6nFDQXskYLZ8iMCjRCw6c8vbNc_7KwsGbw62K4cWxgkWRn7f04Nj8Rnl3QQRUV7aoyiUoHmHfVLNDnkQXLSQjjAsrdC16W4i_sGLlqz_fzUsqEKlWVevkHzc7Z2o4itNg4WE7SqZgKfDllCQQB1M_rhOdUctjxBaUA0rJS2mLjX6NFEOEHykjndSswN3bx53OgutUv82sgkv0GWqRHKZCb0hQy-8ps8Knmt3I8C-_6dZfAxhjFL4gV5dWH7St1iw',
+			}
+		})
 		const transactions = await response.json()
 		dispatch(loadTransactionsSuccess(transactions))
 	} catch (e) {
@@ -67,8 +99,7 @@ export const loadTransactionsNoPagination = (category) => async (dispatch) => {
 		dispatch(loadTransactionsInProgress())
 		let url = "/api/transactions"
 		if (category) url += "?category=" + category
-		debugger
-		const response = await fetch(url)
+		const response = await apiFetch(url)
 		const transactions = await response.json()
 		dispatch(loadTransactionsSuccess(transactions))
 	} catch (e) {
@@ -80,7 +111,7 @@ export const loadTransactionsNoPagination = (category) => async (dispatch) => {
 export const setCategoryRequest = (transactionId, categoryId) => async dispatch => {
 	try {
 		const body = JSON.stringify({ transactionId, categoryId })
-		const response = await fetch('/api/set-category', {
+		const response = await apiFetch('/api/set-category', {
 			headers: {
 				'Content-Type': 'application/json'
 			},
@@ -95,10 +126,9 @@ export const setCategoryRequest = (transactionId, categoryId) => async dispatch 
 }
 
 export const applyRules = () => async (dispatch) => {
-	debugger
 	try {
 		const body = JSON.stringify({ "uncategorizedOnly": true })
-		const response = await fetch('/api/apply_rules', {
+		const response = await apiFetch('/api/apply_rules', {
 			headers: {
 				'Content-Type': 'application/json'
 			},

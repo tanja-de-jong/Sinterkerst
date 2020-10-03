@@ -10,17 +10,14 @@ import {
 } from "../transactions/thunks"
 import CategorySelector from "../transactions/CategorySelector"
 import {withAuthenticationRequired} from "@auth0/auth0-react"
+import TransactionList from "../transactions/TransactionList"
 
 const IncomeExpensesDashboard = ({ allCategories = [], transactions = [], amounts, getAmounts, startLoadingTransactions }) => {
-
-	// useEffect(() => {
-	// 	debugger
-	// 	getAmounts("22ofrnfYO")
-	// })
 
 	const [category, setCategory] = useState()
 	const [descendants, setDescendants] = useState([])
 	const [loading, setLoading] = useState(false)
+	const [filteredTransactions, setFilteredTransactions] = useState([])
 
 	const getDescendantCategories = (parent) => {
 		const children = allCategories.filter(category => category.parent === parent).map(child => child.id)
@@ -34,31 +31,21 @@ const IncomeExpensesDashboard = ({ allCategories = [], transactions = [], amount
 		const descendants = getDescendantCategories(value).concat(value)
 		setDescendants(descendants)
 		const parentChildrenIds = descendants
-		getAmounts(parentChildrenIds).then(setLoading(false))
+		getAmounts([0, 1], parentChildrenIds).then(setLoading(false))
 		startLoadingTransactions(value)
-	}
+	} 
 
-	const total = () => {
+	const total = (account) => {
+		const rows = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map(month => <td>{totalPerMonth(account, 2020, month)}</td>)
 		return <tr>
 			<td>Totaal</td>
 			<td>TBD</td>
-			<td>{totalPerMonth(2020, 0)}</td>
-			<td>{totalPerMonth(2020, 1)}</td>
-			<td>{totalPerMonth(2020, 2)}</td>
-			<td>{totalPerMonth(2020, 3)}</td>
-			<td>{totalPerMonth(2020, 4)}</td>
-			<td>{totalPerMonth(2020, 5)}</td>
-			<td>{totalPerMonth(2020, 6)}</td>
-			<td>{totalPerMonth(2020, 7)}</td>
-			<td>{totalPerMonth(2020, 8)}</td>
-			<td>{totalPerMonth(2020, 9)}</td>
-			<td>{totalPerMonth(2020, 10)}</td>
-			<td>{totalPerMonth(2020, 11)}</td>
+			{rows}
 		</tr>
 	}
 
-	const averagePerMonth = (categoryId) => {
-		const transactionsForCategory = transactions.filter(transaction => transaction.category === categoryId)
+	const averagePerMonth = (account, categoryId) => {
+		const transactionsForCategory = transactions.filter(transaction => transaction.account === account && transaction.category === categoryId)
 
 		const firstTransactionDate = moment(Math.min(transactionsForCategory.map(transaction => parseInt(transaction.date))), "YYYYMMDD")
 		const firstMonthThisYear = moment().month(0).date(1)
@@ -73,40 +60,58 @@ const IncomeExpensesDashboard = ({ allCategories = [], transactions = [], amount
 			})
 			.map(transaction => parseFloat(transaction.amount))
 			.reduce((a, b) => a + b, 0)
-debugger
+
 		return sum / numberOfMonths
 	}
 
-	const totalPerMonth = (year, month) => {
-		const descendantAmounts = descendants.map(desc => parseFloat(byCategoryAndPeriod(desc, year, month)))
+	const totalPerMonth = (account, year, month) => {
+		const descendantAmounts = descendants.map(desc => parseFloat(byCategoryAndPeriod(account, desc, year, month)))
 		return descendantAmounts.reduce((a, b) => a + b, 0).toFixed(2)
 	}
 
-	const byCategoryAndPeriod = (category, year, month) => {
-		const amountsForCategory = amounts.find(amount => amount.category === category)
-		debugger
+	const byCategoryAndPeriod = (account, category, year, month) => {
+		const temp = amounts.find(obj => obj.account === account)
+		if (!temp) console.log(account)
+		const amountsForCategory = amounts.find(obj => obj.account === account).amounts.find(amount => amount.category === category)
 		const amountForYear = amountsForCategory.years.find(y => y.year === year)
 		const amountForMonth = amountForYear.months.find(m => m.month === month).amount
 		return amountForMonth
 	}
 
-	const byCategory = (categoryId) => {
+	const byCategory = (account, categoryId) => {
+		const rows = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map(month => <td onClick={() => setFilteredTransactions(transactions.filter(transaction => transaction.account === account && transaction.category === categoryId && moment(transaction.date, 'YYYYMMDD').month() === month && moment(transaction.date, 'YYYYMMDD').year() === 2020))}>{byCategoryAndPeriod(account, categoryId, 2020, month)}</td>)
 		return <tr>
 			<td>{allCategories.find(cat => cat.id === categoryId).name}</td>
-			<td>{averagePerMonth(categoryId)}</td>
-			<td>{byCategoryAndPeriod(categoryId, 2020, 0)}</td>
-			<td>{byCategoryAndPeriod(categoryId, 2020, 1)}</td>
-			<td>{byCategoryAndPeriod(categoryId, 2020, 2)}</td>
-			<td>{byCategoryAndPeriod(categoryId, 2020, 3)}</td>
-			<td>{byCategoryAndPeriod(categoryId, 2020, 4)}</td>
-			<td>{byCategoryAndPeriod(categoryId, 2020, 5)}</td>
-			<td>{byCategoryAndPeriod(categoryId, 2020, 6)}</td>
-			<td>{byCategoryAndPeriod(categoryId, 2020, 7)}</td>
-			<td>{byCategoryAndPeriod(categoryId, 2020, 8)}</td>
-			<td>{byCategoryAndPeriod(categoryId, 2020, 9)}</td>
-			<td>{byCategoryAndPeriod(categoryId, 2020, 10)}</td>
-			<td>{byCategoryAndPeriod(categoryId, 2020, 11)}</td>
+			<td>{averagePerMonth(account, categoryId)}</td>
+			{rows}
 		</tr>
+	}
+
+	const renderAccount = (account) => {
+		return <div>
+			<table>
+				<tbody>
+				<tr>
+					<th>Categorie</th>
+					<th>Gemiddeld</th>
+					<th>Januari</th>
+					<th>Februari</th>
+					<th>Maart</th>
+					<th>April</th>
+					<th>Mei</th>
+					<th>Juni</th>
+					<th>Juli</th>
+					<th>Augustus</th>
+					<th>September</th>
+					<th>Oktober</th>
+					<th>November</th>
+					<th>December</th>
+				</tr>
+				{loading ? "Loading..." : descendants.map(desc => byCategory(account, desc))}
+				{loading ? "Loading..." : total(account)}
+				</tbody>
+			</table>
+		</div>
 	}
 
 	return <div>
@@ -129,33 +134,18 @@ debugger
 			<button>November</button>
 			<button>December</button>
 		</div>
+		<br/>
 		{category
 			? <div>
-				<table>
-					<tbody>
-					<tr>
-						<th>Categorie</th>
-						<th>Gemiddeld</th>
-						<th>Januari</th>
-						<th>Februari</th>
-						<th>Maart</th>
-						<th>April</th>
-						<th>Mei</th>
-						<th>Juni</th>
-						<th>Juli</th>
-						<th>Augustus</th>
-						<th>September</th>
-						<th>Oktober</th>
-						<th>November</th>
-						<th>December</th>
-					</tr>
-					{loading ? "Loading..." : descendants.map(desc => byCategory(desc))}
-					{loading ? "Loading..." : total()}
-					</tbody>
-				</table>
+				Tanja
+				{renderAccount(0)}
+				<br/>
+				Samen
+				{renderAccount(1)}
 			</div>
 			: "No category selected"
 		}
+		<TransactionList transactions={filteredTransactions} />
 	</div>
 }
 
@@ -166,7 +156,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-	getAmounts: (category) => dispatch(getAmountsRequest(category)),
+	getAmounts: (accounts, category) => dispatch(getAmountsRequest(accounts, category)),
 	startLoadingTransactions: (category) => dispatch(loadTransactionsNoPagination(category)),
 })
 

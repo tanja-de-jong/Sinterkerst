@@ -5,11 +5,17 @@ import Select from "react-select"
 import {allCategories} from "../categories/selectors"
 import CategorySelector from "../transactions/CategorySelector"
 const AddOrUpdateRule = ({ rule, categories, addRule, updateRule }) => {
+	const comparatorOptions = [
+		{
+			"value": "includes",
+			"label": "includes"
+		}
+	]
 
 	const [description, setDescription] = useState(rule ? rule.name : "")
 	const [category, setCategory] = useState(rule && rule.category ? rule.category : null)
 	const [field, setField] = useState(rule && rule.comparisons.length > 0 && rule.comparisons[0].field ? { "value": rule.comparisons[0].field, "label": rule.comparisons[0].field } : null)
-	const [comparator, setComparator] = useState(rule && rule.comparisons.length > 0 && rule.comparisons[0].type ? { "value": rule.comparisons[0].type, "label": rule.comparisons[0].tyle } : null)
+	const [comparator, setComparator] = useState(rule && rule.comparisons.length > 0 && rule.comparisons[0].type ? { "value": rule.comparisons[0].type, "label": rule.comparisons[0].type } : comparatorOptions[0])
 	const [text, setText] = useState(rule && rule.comparisons.length > 0 ? rule.comparisons[0].text : "")
 
 	const onSubmitPressed = () => {
@@ -53,18 +59,11 @@ const AddOrUpdateRule = ({ rule, categories, addRule, updateRule }) => {
 		}
 	]
 
-	const comparatorOptions = [
-		{
-			"value": "includes",
-			"label": "includes"
-		}
-	]
-
 	return (
 		<form onSubmit={onSubmitPressed}>
 			<h2>Maak nieuwe regel</h2>
 			<div>
-				<input type="text" name="description" value={description} placeholder="Omschrijving" onChange={e => setDescription(e.target.value)} />
+				<input type="text" name="name" value={description} placeholder="Naam" onChange={e => setDescription(e.target.value)} />
 			</div>
 
 			<div>
@@ -99,8 +98,8 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-	addRule: (description, category, field, text) => dispatch(addRuleRequest(description, category, field, text)),
-	updateRule: (id, description, category, field, text) => dispatch(updateRuleRequest(id, description, category, field, text)),
+	addRule: (name, category, field, text) => dispatch(addRuleRequest(name, category, field, text)),
+	updateRule: (id, name, category, field, text) => dispatch(updateRuleRequest(id, name, category, field, text)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddOrUpdateRule)

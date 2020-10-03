@@ -11,7 +11,10 @@ const moment = require('moment')
 
 const upload = multer({dest: 'uploads/'})
 const app = express();
-const port = process.env.PORT || 5000;
+const port = process.env.API_PORT || 5000;
+const appOrigin = process.env.APP_ORIGIN;
+const audience = process.env.AUTH0_AUDIENCE;
+const issuer = process.env.AUTH0_ISSUER;
 const dbPath = 'db.json';
 let newDb = true;
 const limit = 50
@@ -79,61 +82,61 @@ low(adapter).then(db => {
 	// 	res.status(200).json(filteredTransactions.value())
 	// });
 
-	app.get('/transactions/amount', (req, res) => {
-		console.log("API: get amounts")
-		const categories = req.query.categories.split(',')
-		const result = []
-		console.log(categories)
-		categories.forEach(category => result.push(amountByCategory(category)))
+	// app.get('/transactions/amount', (req, res) => {
+	// 	console.log("API: get amounts")
+	// 	const categories = req.query.categories.split(',')
+	// 	const result = []
+	// 	console.log(categories)
+	// 	categories.forEach(category => result.push(amountByCategory(category)))
+	//
+	// 	res.status(200).json(result)
+	// })
 
-		res.status(200).json(result)
-	})
+	// const amountByCategory = (category) => {
+	// 	const years = [2019, 2020]
+	// 	const months = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+	//
+	// 	const result = {
+	// 		category,
+	// 		years: []
+	// 	}
+	// 	years.forEach(year => {
+	// 		const yResult = {
+	// 			year,
+	// 			months: []
+	// 		}
+	// 		result.years.push(yResult)
+	// 		months.forEach(month => {
+	// 			const mResult = {
+	// 				month,
+	// 				amount: amountByCategoryAndMonth(category, year, month)
+	// 			}
+	// 			yResult.months.push(mResult)
+	// 		})
+	// 	})
+	//
+	// 	return result
+	// }
 
-	const amountByCategory = (category) => {
-		const years = [2019, 2020]
-		const months = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
-
-		const result = {
-			category,
-			years: []
-		}
-		years.forEach(year => {
-			const yResult = {
-				year,
-				months: []
-			}
-			result.years.push(yResult)
-			months.forEach(month => {
-				const mResult = {
-					month,
-					amount: amountByCategoryAndMonth(category, year, month)
-				}
-				yResult.months.push(mResult)
-			})
-		})
-
-		return result
-	}
-
-	const amountByCategoryAndMonth = (category, year, month) => {
-		const filteredTransactions = db.get('transactions').value().filter(transaction => {
-			const date = moment(transaction.date, "YYYYMMDD")
-			const validPeriod = date.year() === year && date.month() === month
-			const validCategory = transaction.category === category
-			return validPeriod && validCategory
-		})
-
-		const amountForMonth = filteredTransactions.map(transaction => {
-			const factors = {
-				"NL74INGB0654972370": 1,
-				"NL62INGB0689027346": 0.5
-			}
-			const factor = factors[transaction.account]
-			return parseFloat(transaction.amount.replace(',', '.')) * factor
-		})
-		const amount = amountForMonth.reduce((a, b) => a + b, 0.00).toFixed(2)
-		return amount
-	}
+	// const amountByCategoryAndMonth = (category, year, month) => {
+	// 	const filteredTransactions = db.get('transactions').value().filter(transaction => {
+	// 		const date = moment(transaction.date, "YYYYMMDD")
+	// 		const validPeriod = date.year() === year && date.month() === month
+	// 		const validCategory = transaction.category === category
+	// 		return validPeriod && validCategory
+	// 	})
+	//
+	// 	const amountForMonth = filteredTransactions.map(transaction => {
+	// 		const factors = {
+	// 			"NL74INGB0654972370": 1,
+	// 			"NL62INGB0689027346": 0.5
+	// 		}
+	// 		const factor = factors[transaction.account]
+	// 		return parseFloat(transaction.amount.replace(',', '.')) * factor
+	// 	})
+	// 	const amount = amountForMonth.reduce((a, b) => a + b, 0.00).toFixed(2)
+	// 	return amount
+	// }
 
 	// 	app.get('/categories', (req, res) => {
 	// 	console.log("API: Fetch categories")
@@ -156,94 +159,77 @@ low(adapter).then(db => {
 	// });
 
 	// Receive a CSV file
-	app.post('/upload-file', upload.single('transactionList'), (req, res, next) => {
-		console.log("API: Upload file")
-		csv({headers: ["date", "description", "account", "otherAccount", "code", "debitOrCredit", "amount", "mutation", "remarks"]})
-			.fromFile(req.file.path)
-			.then((json) => {
-				if (json.length > 0) {
-					const account = json[0].account
-					const lastUpdated = db.get('accounts').find({iban: account}).value().updated
-					let newLastUpdated = lastUpdated
+	// app.post('/upload-file', upload.single('transactionList'), (req, res, next) => {
+	// 	console.log("API: Upload file")
+	// 	csv({headers: ["date", "description", "account", "otherAccount", "code", "debitOrCredit", "amount", "mutation", "remarks"]})
+	// 		.fromFile(req.file.path)
+	// 		.then((json) => {
+	// 			if (json.length > 0) {
+	// 				const account = json[0].account
+	// 				const lastUpdated = db.get('accounts').find({iban: account}).value().updated
+	// 				let newLastUpdated = lastUpdated
+	//
+	// 				const existingTransactions = []
+	// 				const newTransactions = []
+	// 				json.forEach(transaction => {
+	// 					// Process fields
+	// 					if (transaction.debitOrCredit === "Af") {
+	// 						transaction.amount = "-" + transaction.amount
+	// 					}
+	//
+	// 					// Check if transaction exists
+	// 					const existingTransaction = db.get('transactions').find({
+	// 						date: transaction.date,
+	// 						description: transaction.description,
+	// 						account: transaction.account,
+	// 						otherAccount: transaction.otherAccount,
+	// 						code: transaction.code,
+	// 						debitOrCredit: transaction.debitOrCredit,
+	// 						amount: transaction.amount,
+	// 						mutation: transaction.mutation,
+	// 						remarks: transaction.remarks
+	// 					})
+	//
+	// 					if (existingTransaction) {	// Transaction already exists, so don't add again
+	// 						existingTransactions.push(existingTransaction.value())
+	// 					} else {										// Transaction doesn't exist yet, so add it
+	// 						// Set the last updated date of the account to the date of the newest transaction
+	// 						if (transaction.date > newLastUpdated) {
+	// 							newLastUpdated = transaction.date
+	// 						}
+	//
+	// 						// Generate id
+	// 						transaction.id = shortid.generate()
+	//
+	// 						// Apply rules
+	// 						const categories = applyRules(transaction)
+	// 						if (categories.length === 1) {
+	// 							transaction.category = categories[0]
+	// 						} else {
+	// 							transaction.category = "22ofrnfYO"	// Ongecategoriseerd
+	// 							if (categories.length > 0) {
+	// 								console.log("Transaction " + transaction.id + " has multiple categories: " + categories)
+	// 							}
+	// 						}
+	//
+	// 						newTransactions.push(transaction)
+	// 					}
+	// 				})
+	// 				db.get('transactions').push(...newTransactions).write()
+	// 				db.get('accounts').find({iban: account}).assign({updated: newLastUpdated + ""}).write()
+	//
+	// 				if (existingTransactions.length > 0) {
+	// 					console.log("Transactions already exist:")
+	// 					console.log(existingTransactions.map(t => t.id))
+	// 				}
+	//
+	// 				return new Promise((resolve, reject) => {
+	// 					res.status(200).json({ newTransactions, existingTransactions })
+	// 				})
+	// 			}
+	// 		})
+	// });
 
-					const existingTransactions = []
-					const newTransactions = []
-					json.forEach(transaction => {
-						// Process fields
-						if (transaction.debitOrCredit === "Af") {
-							transaction.amount = "-" + transaction.amount
-						}
-
-						// Check if transaction exists
-						const existingTransaction = db.get('transactions').find({
-							date: transaction.date,
-							description: transaction.description,
-							account: transaction.account,
-							otherAccount: transaction.otherAccount,
-							code: transaction.code,
-							debitOrCredit: transaction.debitOrCredit,
-							amount: transaction.amount,
-							mutation: transaction.mutation,
-							remarks: transaction.remarks
-						})
-
-						if (existingTransaction) {	// Transaction already exists, so don't add again
-							existingTransactions.push(existingTransaction.value())
-						} else {										// Transaction doesn't exist yet, so add it
-							// Set the last updated date of the account to the date of the newest transaction
-							if (transaction.date > newLastUpdated) {
-								newLastUpdated = transaction.date
-							}
-
-							// Generate id
-							transaction.id = shortid.generate()
-
-							// Apply rules
-							const categories = applyRules(transaction)
-							if (categories.length === 1) {
-								transaction.category = categories[0]
-							} else {
-								transaction.category = "22ofrnfYO"	// Ongecategoriseerd
-								if (categories.length > 0) {
-									console.log("Transaction " + transaction.id + " has multiple categories: " + categories)
-								}
-							}
-
-							newTransactions.push(transaction)
-						}
-					})
-					db.get('transactions').push(...newTransactions).write()
-					db.get('accounts').find({iban: account}).assign({updated: newLastUpdated + ""}).write()
-
-					if (existingTransactions.length > 0) {
-						console.log("Transactions already exist:")
-						console.log(existingTransactions.map(t => t.id))
-					}
-
-					return new Promise((resolve, reject) => {
-						res.status(200).json({ newTransactions, existingTransactions })
-					})
-				}
-			})
-	});
-
-	const applyRules = (jsonTransaction) => {
-		const rules = db.get('rules').value()
-		const categories = []
-		rules.forEach(rule => {
-			let allRulesTrue = true
-			rule.comparisons.forEach(comparison => {
-				const {field, type, text} = comparison
-				if (!jsonTransaction[field].toLowerCase().includes(text.toLowerCase())) {	// TODO: actually use'type' instead of hardcoded 'includes'
-					allRulesTrue = false
-				}
-			})
-			if (allRulesTrue && !categories.includes(rule.category)) {
-				categories.push(rule.category)
-			}
-		})
-		return categories
-	}
 
 	// CATEGORIES
 	// The route for creating new inventory items
@@ -289,54 +275,54 @@ low(adapter).then(db => {
 	// });
 
 	// The route for creating new rules
-	app.post('/rules', (req, res) => {
-		console.log("API: Add rule")
-		const {description, comparisons, category} = req.body
-		if (description && comparisons.length > 0 && category) {
-			const insertedRule = {
-				id: shortid.generate(),
-				description,
-				comparisons,
-				category
-			}
-			db.get('rules').insert(insertedRule).write()
-
-			res.status(200).json(insertedRule)
-		} else {
-			res.status(400).json({message: 'Request body should have a field, comparisons and category'})
-		}
-	})
+	// app.post('/rules', (req, res) => {
+	// 	console.log("API: Add rule")
+	// 	const {description, comparisons, category} = req.body
+	// 	if (description && comparisons.length > 0 && category) {
+	// 		const insertedRule = {
+	// 			id: shortid.generate(),
+	// 			description,
+	// 			comparisons,
+	// 			category
+	// 		}
+	// 		db.get('rules').insert(insertedRule).write()
+	//
+	// 		res.status(200).json(insertedRule)
+	// 	} else {
+	// 		res.status(400).json({message: 'Request body should have a field, comparisons and category'})
+	// 	}
+	// })
 
 	// The route for creating new rules
-	app.put('/apply_rules', (req, res) => {
-		console.log("API: Apply rules")
-		const {uncategorizedOnly} = req.body
-
-		const updatedTransactions = []
-		const failedTransactions = []
-
-		db.get('transactions').value().forEach(transaction => {
-			if (!uncategorizedOnly || transaction.category === "22ofrnfYO") {
-				const categories = applyRules(transaction)
-				if (categories.length === 1) {
-					transaction.category = categories[0]
-					db.get('transaction').find({id: transaction.id}).assign(transaction).write()
-					updatedTransactions.push(transaction)
-				} else if (categories.length > 0) {
-					console.log("Transaction " + transaction.id + " has multiple categories: " + categories)
-					failedTransactions.push({
-						"transaction": transaction.id,
-						"categories": categories
-					})
-				}
-			}
-		})
-
-		res.status(200).json({
-			updatedTransactions,
-			failedTransactions
-		})
-	})
+	// app.put('/apply_rules', (req, res) => {
+	// 	console.log("API: Apply rules")
+	// 	const {uncategorizedOnly} = req.body
+	//
+	// 	const updatedTransactions = []
+	// 	const failedTransactions = []
+	//
+	// 	db.get('transactions').value().forEach(transaction => {
+	// 		if (!uncategorizedOnly || transaction.category === "22ofrnfYO") {
+	// 			const categories = applyRules(transaction)
+	// 			if (categories.length === 1) {
+	// 				transaction.category = categories[0]
+	// 				db.get('transaction').find({id: transaction.id}).assign(transaction).write()
+	// 				updatedTransactions.push(transaction)
+	// 			} else if (categories.length > 0) {
+	// 				console.log("Transaction " + transaction.id + " has multiple categories: " + categories)
+	// 				failedTransactions.push({
+	// 					"transaction": transaction.id,
+	// 					"categories": categories
+	// 				})
+	// 			}
+	// 		}
+	// 	})
+	//
+	// 	res.status(200).json({
+	// 		updatedTransactions,
+	// 		failedTransactions
+	// 	})
+	// })
 
 	if (newDb) {
 		// set some defaults (required if JSON file is empty)

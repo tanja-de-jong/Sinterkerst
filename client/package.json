@@ -4,11 +4,15 @@
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.11.0",
+    "@material-ui/data-grid": "^4.0.0-alpha.6",
+    "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.56",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "babel-loader": "^8.1.0",
+    "eslint-plugin-react-hooks": "^4.1.2",
+    "fetch-defaults": "^1.0.0",
     "moment": "^2.27.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
@@ -29,6 +33,7 @@
     "eject": "react-scripts eject"
   },
   "proxy": "http://localhost:5000/",
+  "secure": false,
   "eslintConfig": {
     "extends": "react-app"
   },
