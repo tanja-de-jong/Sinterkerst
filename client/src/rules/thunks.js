@@ -4,12 +4,12 @@ import {
 	loadRulesInProgress,
 	loadRulesSuccess, updateRule
 } from "./actions"
-import { apiFetch } from "../helper"
 
-export const loadRules = (token) => async (dispatch) => {
+
+export const loadRules = () => async (dispatch) => {
 	try {
-		dispatch(loadRulesInProgress(token))
-		const response = await apiFetch('/api/rules', token)
+		dispatch(loadRulesInProgress())
+		const response = await fetch('/api/rules')
 		const rules = await response.json()
 		dispatch(loadRulesSuccess(rules))
 	} catch (e) {
@@ -31,7 +31,7 @@ export const addRuleRequest = (name, category, field, text) => async dispatch =>
 			],
 			category
 		})
-		const response = await apiFetch('/api/rules', {
+		const response = await fetch('/api/rules', {
 			headers: {
 				'Content-Type': 'application/json'
 			},
@@ -48,7 +48,7 @@ export const addRuleRequest = (name, category, field, text) => async dispatch =>
 export const updateRuleRequest = (id, name, parent, type) => async dispatch => {
 	try {
 		const body = JSON.stringify({id, name, parent, type})
-		const response = await apiFetch('/api/rules', {
+		const response = await fetch('/api/rules', {
 			headers: {
 				'Content-Type': 'application/json'
 			},

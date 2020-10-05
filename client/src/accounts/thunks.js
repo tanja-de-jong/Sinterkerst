@@ -1,12 +1,12 @@
 import {
 	loadAccountsFailure, loadAccountsInProgress, loadAccountsSuccess,
 } from "./actions"
-import {apiFetch} from "../helper"
+
 
 export const loadAccounts = () => async (dispatch) => {
 	try {
 		dispatch(loadAccountsInProgress())
-		const response = await apiFetch('/api/accounts')
+		const response = await fetch('/api/accounts')
 		const accounts = await response.json()
 		dispatch(loadAccountsSuccess(accounts))
 	} catch (e) {

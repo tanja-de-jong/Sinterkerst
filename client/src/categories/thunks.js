@@ -5,7 +5,7 @@ import {
 	loadCategoriesSuccess,
 	updateCategory
 } from "./actions"
-import {apiFetch} from "../helper"
+
 
 export const loadCategories = (token) => async (dispatch) => {
 	try {
@@ -24,7 +24,7 @@ export const loadCategories = (token) => async (dispatch) => {
 export const addCategoryRequest = (name, parent) => async dispatch => {
 	try {
 		const body = JSON.stringify({ name, parent })
-		const response = await apiFetch('/api/categories', {
+		const response = await fetch('/api/categories', {
 			headers: {
 				'Content-Type': 'application/json'
 			},
@@ -41,7 +41,7 @@ export const addCategoryRequest = (name, parent) => async dispatch => {
 export const updateCategoryRequest = (id, name, parent) => async dispatch => {
 	try {
 		const body = JSON.stringify({id, name, parent})
-		const response = await apiFetch('/api/categories', {
+		const response = await fetch('/api/categories', {
 			headers: {
 				'Content-Type': 'application/json'
 			},

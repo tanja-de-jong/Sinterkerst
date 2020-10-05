@@ -31,6 +31,7 @@ import orange from '@material-ui/core/colors/orange';
 import {ThemeProvider} from "styled-components"
 import NavigationBar from "./NavigationBar"
 import {useAuth0} from "@auth0/auth0-react"
+import {registerFetchIntercept} from "./helper"
 
 const drawerWidth = 240;
 
@@ -74,19 +75,18 @@ const theme = createMuiTheme({
 const App = ({ categoriesLoading, rulesLoading, startLoadingCategories, startLoadingRules }) => {
   const {getAccessTokenSilently} = useAuth0();
 
+  const register = async () => {
+    console.log("In use effect")
+    const token = await getAccessTokenSilently()
+    console.log(token)
+    registerFetchIntercept(token)
+    console.log("Registered fetch interceptor")
+  }
+
   useEffect(() => {
-    const getAccessToken = async () => {
-      console.log("Get access token")
-      const token = await getAccessTokenSilently({
-        audience: process.env.REACT_APP_AUDIENCE
-      })
-      console.log("Token: " + token)
-      return token
-    }
-    getAccessToken().then(token => {
-      startLoadingCategories(token)
-      startLoadingRules(token)
-    })
+    register()
+    startLoadingCategories()
+    startLoadingRules()
   }, [startLoadingCategories, startLoadingRules])
 
   const classes = useStyles();
