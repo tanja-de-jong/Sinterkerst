@@ -94,7 +94,7 @@ const App = ({ categoriesLoading, rulesLoading, startLoadingCategories, startLoa
   const classes = useStyles();
 
   if (isLoading) return <div>Loading...</div>
-  if (!isAuthenticated) return <div><LoginScreen /></div>
+  // if (!isAuthenticated) return <div><LoginScreen /></div>
 
   if (!categoriesLoading && !rulesLoading) {
     return (
