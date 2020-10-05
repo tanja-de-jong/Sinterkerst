@@ -21,7 +21,6 @@ const onRedirectCallback = (appState) => {
   history.replace(appState?.returnTo || window.location.pathname);
 }
 
-console.log(process.env)
 ReactDOM.render(
   <Auth0Provider
     domain={domain}

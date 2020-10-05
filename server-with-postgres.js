@@ -25,18 +25,18 @@ const origin = {
 app.use(cors(origin))
 app.use(express.static('client'))
 
-const jwtCheck = jwt({
-	secret: jwks.expressJwtSecret({
-		cache: true,
-		rateLimit: true,
-		jwksRequestsPerMinute: 5,
-		jwksUri: 'https://twilight-snowflake-4165.us.auth0.com/.well-known/jwks.json'
-	}),
-	audience: 'tanja-money-manager.heroku.com',
-	issuer: 'https://twilight-snowflake-4165.us.auth0.com/',
-	algorithms: ['RS256']
-});
-app.use(jwtCheck);
+// const jwtCheck = jwt({
+// 	secret: jwks.expressJwtSecret({
+// 		cache: true,
+// 		rateLimit: true,
+// 		jwksRequestsPerMinute: 5,
+// 		jwksUri: 'https://twilight-snowflake-4165.us.auth0.com/.well-known/jwks.json'
+// 	}),
+// 	audience: 'tanja-money-manager.heroku.com',
+// 	issuer: 'https://twilight-snowflake-4165.us.auth0.com/',
+// 	algorithms: ['RS256']
+// });
+// app.use(jwtCheck);
 
 // TRANSACTIONS
 const getNumberOfRows = async (request, response) => {
