@@ -97,7 +97,7 @@ const App = ({ categoriesLoading, rulesLoading, startLoadingCategories, startLoa
       }
     )
     console.log("Log")
-  }, [startLoadingCategories, startLoadingRules])
+  }, [startLoadingCategories, startLoadingRules, isAuthenticated])
 
   const classes = useStyles();
 
