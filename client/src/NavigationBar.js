@@ -84,9 +84,6 @@ const NavigationBar = () => {
                 <ListItemText primary="Instellingen" />
               </ListItem>
               <ListItem>
-                {/*<Button onClick={}>Nieuw</Button>*/}
-              </ListItem>
-              <ListItem>
                 <LogoutButton/>
               </ListItem>
             </List>

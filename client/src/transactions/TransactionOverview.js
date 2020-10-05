@@ -6,12 +6,16 @@ import {allTransactions} from "./selectors"
 import CategorySelector from "./CategorySelector"
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
 import Dialog from "@material-ui/core/Dialog"
+import ListItem from "@material-ui/core/ListItem"
 
 const TransactionOverview = ({ transactions = [], applyRules }) => {
 
+	const [open, setOpen] = useState(false)
+
 	return <div>
 		<TransactionList />
-		<UploadModal open={true}/>
+		<Button onClick={() => setOpen(true)}>Nieuw</Button>
+		<UploadModal open={open}/>
 	</div>
 	{/*<button onClick={applyRules}>Regels uitvoeren</button>*/}
 }
@@ -25,5 +29,7 @@ export default connect(null, mapDispatchToProps)(withAuthenticationRequired(Tran
 }))
 
 const UploadModal = (open) => {
-	return <Dialog open={open} />
+	return <Dialog open={open}>
+		Test
+	</Dialog>
 }
