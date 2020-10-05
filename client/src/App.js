@@ -72,10 +72,23 @@ const theme = createMuiTheme({
 });
 
 const App = ({ categoriesLoading, rulesLoading, startLoadingCategories, startLoadingRules }) => {
+  const {getAccessTokenSilently} = useAuth0();
+
   useEffect(() => {
-    startLoadingCategories()
-    startLoadingRules()
+    const getAccessToken = async () => {
+      console.log("Get access token")
+      const token = await getAccessTokenSilently({
+        audience: process.env.REACT_APP_AUDIENCE
+      })
+      console.log("Token: " + token)
+      return token
+    }
+    getAccessToken().then(token => {
+      startLoadingCategories(token)
+      startLoadingRules(token)
+    })
   }, [startLoadingCategories, startLoadingRules])
+
   const classes = useStyles();
 
   const { isAuthenticated, isLoading } = useAuth0();
@@ -113,8 +126,8 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  startLoadingCategories: () => dispatch(loadCategories()),
-  startLoadingRules: () => dispatch(loadRules())
+  startLoadingCategories: (token) => dispatch(loadCategories(token)),
+  startLoadingRules: (token) => dispatch(loadRules(token))
 })
 
 const ConnectedApp = connect(mapStateToProps, mapDispatchToProps)(App)

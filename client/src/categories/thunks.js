@@ -7,10 +7,12 @@ import {
 } from "./actions"
 import {apiFetch} from "../helper"
 
-export const loadCategories = () => async (dispatch) => {
+export const loadCategories = (token) => async (dispatch) => {
 	try {
 		dispatch(loadCategoriesInProgress())
-		const response = await apiFetch('/api/categories')
+		const response = await fetch('/api/categories', {
+			headers: {Authorization: 'Bearer ' + token}
+		})
 		const categories = await response.json()
 		dispatch(loadCategoriesSuccess(categories))
 	} catch (e) {

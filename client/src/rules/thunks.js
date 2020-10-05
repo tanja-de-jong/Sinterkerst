@@ -4,12 +4,12 @@ import {
 	loadRulesInProgress,
 	loadRulesSuccess, updateRule
 } from "./actions"
-import {apiFetch} from "../helper"
+import { apiFetch } from "../helper"
 
-export const loadRules = () => async (dispatch) => {
+export const loadRules = (token) => async (dispatch) => {
 	try {
-		dispatch(loadRulesInProgress())
-		const response = await apiFetch('/api/rules')
+		dispatch(loadRulesInProgress(token))
+		const response = await apiFetch('/api/rules', token)
 		const rules = await response.json()
 		dispatch(loadRulesSuccess(rules))
 	} catch (e) {
