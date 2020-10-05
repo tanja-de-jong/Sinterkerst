@@ -76,27 +76,19 @@ const App = ({ categoriesLoading, rulesLoading, startLoadingCategories, startLoa
   const {getAccessTokenSilently} = useAuth0();
   const { isAuthenticated, isLoading } = useAuth0();
 
-  const register = async () => {
-    let token = "Test token"
-    if (isAuthenticated) {
-      token = await getAccessTokenSilently()
-      const unregister = registerFetchIntercept(token)
-      console.log("Registered fetch interceptor")
-    }
-    console.log("Finish")
-    console.log(token)
-
-  }
-
   useEffect(() => {
-    console.log("In use effect")
-    register().then(() => {
-      console.log("Done registering")
-        startLoadingCategories()
-        startLoadingRules()
+    if (isAuthenticated) {
+      const register = async () => {
+        const token = await getAccessTokenSilently()
+        registerFetchIntercept(token)
       }
-    )
-    console.log("Log")
+
+      register().then(() => {
+          startLoadingCategories()
+          startLoadingRules()
+        }
+      )
+    }
   }, [startLoadingCategories, startLoadingRules, isAuthenticated])
 
   const classes = useStyles();
