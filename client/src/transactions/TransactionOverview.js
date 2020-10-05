@@ -7,6 +7,7 @@ import CategorySelector from "./CategorySelector"
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
 import Dialog from "@material-ui/core/Dialog"
 import ListItem from "@material-ui/core/ListItem"
+import Button from "@material-ui/core/Button"
 
 const TransactionOverview = ({ transactions = [], applyRules }) => {
 
