@@ -4,11 +4,21 @@ export const registerFetchIntercept = (token) => {
 	const unregister = fetchIntercept.register({
 		request: function (url, config) {
 			// Modify the url or config here
-			config.headers = {
-				...config.headers,
-				Authorization: `Bearer ${token}`
+			let newConfig
+			if (config && config.headers) {
+				newConfig = config
+				newConfig.headers = {
+					...newConfig.headers,
+					Authorization: `Bearer ${token}`
+				}
+			} else {
+				 newConfig = {
+					headers: {
+						Authorization: `Bearer ${token}`
+					}
+				}
 			}
-			return [url, config];
+			return [url, newConfig];
 		},
 
 		requestError: function (error) {
