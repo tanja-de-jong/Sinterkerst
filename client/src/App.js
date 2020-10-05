@@ -74,31 +74,35 @@ const theme = createMuiTheme({
 
 const App = ({ categoriesLoading, rulesLoading, startLoadingCategories, startLoadingRules }) => {
   const {getAccessTokenSilently} = useAuth0();
-
-  const classes = useStyles();
-
   const { isAuthenticated, isLoading } = useAuth0();
 
-  if (isLoading) return <div>Loading...</div>
-  if (!isAuthenticated) return <div><LoginScreen /></div>
-
   const register = async () => {
-    const token = await getAccessTokenSilently()
+    let token = "Test token"
+    if (isAuthenticated) {
+      token = await getAccessTokenSilently()
+      const unregister = registerFetchIntercept(token)
+      console.log("Registered fetch interceptor")
+    }
+    console.log("Finish")
     console.log(token)
-    const unregister = registerFetchIntercept(token)
-    console.log("Registered fetch interceptor")
+
   }
 
   useEffect(() => {
     console.log("In use effect")
     register().then(() => {
-        console.log("Done registering")
+      console.log("Done registering")
         startLoadingCategories()
         startLoadingRules()
       }
     )
     console.log("Log")
   }, [startLoadingCategories, startLoadingRules])
+
+  const classes = useStyles();
+
+  if (isLoading) return <div>Loading...</div>
+  if (!isAuthenticated) return <div><LoginScreen /></div>
 
   if (!categoriesLoading && !rulesLoading) {
     return (
