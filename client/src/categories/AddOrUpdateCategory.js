@@ -1,7 +1,6 @@
 import React, {useState} from 'react'
 import {addCategoryRequest, updateCategoryRequest} from "./thunks"
 import {connect} from "react-redux"
-import Select from "react-select"
 import CategorySelector from "../transactions/CategorySelector"
 import TextField from "@material-ui/core/TextField"
 import Button from "@material-ui/core/Button"

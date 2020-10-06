@@ -1,14 +1,11 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import styled from 'styled-components'
 import {
 	allCategories,
 	expensesCategories,
 	incomeCategories,
 	savingsCategories
 } from "../categories/selectors"
-import TextField from "@material-ui/core/TextField"
 import Filter from "./Filter"
 
 const CategorySelector = ({ incomeCategories, expensesCategories, savingsCategories, allCategories, selected, onSelect }) => {

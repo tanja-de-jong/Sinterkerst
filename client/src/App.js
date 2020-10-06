@@ -1,33 +1,12 @@
 import React, {useEffect, useState} from 'react'
 import { hot } from 'react-hot-loader'
 import './App.css';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link
-} from "react-router-dom";
-import {loadRules} from "./rules/thunks"
-import {connect} from "react-redux"
-import {loadCategories} from "./categories/thunks"
-import {categoriesLoading} from "./categories/selectors"
-import {rulesLoading} from "./rules/selectors"
+import { BrowserRouter as Router } from "react-router-dom";
 import AppBar from "@material-ui/core/AppBar"
-import IconButton from "@material-ui/core/IconButton"
-import MenuIcon from '@material-ui/icons/Menu';
-import Drawer from '@material-ui/core/Drawer';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
 import {makeStyles} from "@material-ui/core/styles"
 import Toolbar from "@material-ui/core/Toolbar"
 import Typography from "@material-ui/core/Typography"
-import Button from "@material-ui/core/Button"
 import { createMuiTheme } from '@material-ui/core/styles';
-import orange from '@material-ui/core/colors/orange';
 import {ThemeProvider} from "styled-components"
 import NavigationBar from "./NavigationBar"
 import {useAuth0} from "@auth0/auth0-react"
@@ -72,9 +51,9 @@ const theme = createMuiTheme({
   }
 });
 
-const App = ({ categoriesLoading, rulesLoading, startLoadingCategories, startLoadingRules }) => {
-  const {getAccessTokenSilently} = useAuth0();
-  const { isAuthenticated, isLoading } = useAuth0();
+const App = () => {
+  const [ tokenRegistered, setTokenRegistered ] = useState(false)
+  const { isAuthenticated, isLoading, getAccessTokenSilently } = useAuth0();
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -84,19 +63,18 @@ const App = ({ categoriesLoading, rulesLoading, startLoadingCategories, startLoa
       }
 
       register().then(() => {
-          startLoadingCategories()
-          startLoadingRules()
+        setTokenRegistered(true)
         }
       )
     }
-  }, [startLoadingCategories, startLoadingRules, isAuthenticated])
+  }, [isAuthenticated, getAccessTokenSilently])
 
   const classes = useStyles();
 
   if (isLoading) return <div>Loading...</div>
   if (!isAuthenticated) return <div><LoginScreen /></div>
 
-  if (!categoriesLoading && !rulesLoading) {
+  if (tokenRegistered) {
     return (
       <Router>
       <ThemeProvider theme={theme}>
@@ -120,18 +98,7 @@ const App = ({ categoriesLoading, rulesLoading, startLoadingCategories, startLoa
   }
 }
 
-const mapStateToProps = state => ({
-  categoriesLoading: categoriesLoading(state),
-  rulesLoading: rulesLoading(state),
-})
-
-const mapDispatchToProps = dispatch => ({
-  startLoadingCategories: (token) => dispatch(loadCategories(token)),
-  startLoadingRules: (token) => dispatch(loadRules(token))
-})
-
-const ConnectedApp = connect(mapStateToProps, mapDispatchToProps)(App)
-export default hot(module)(ConnectedApp);
+export default hot(module)(App);
 
 const LoginScreen = () => {
   return <LoginButton/>

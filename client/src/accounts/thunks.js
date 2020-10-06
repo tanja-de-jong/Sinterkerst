@@ -11,10 +11,5 @@ export const loadAccounts = () => async (dispatch) => {
 		dispatch(loadAccountsSuccess(accounts))
 	} catch (e) {
 		dispatch(loadAccountsFailure())
-		dispatch(displayAlert(e))
 	}
-}
-
-export const displayAlert = (text) => () => {
-	alert(text)
 }

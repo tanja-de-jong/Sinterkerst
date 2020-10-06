@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {getRowsRequest, loadTransactions} from "./thunks"
+import {getRowsRequest, loadTransactions, uploadFile} from "./thunks"
 import {connect} from "react-redux"
 import {allTransactions, pages} from "./selectors"
 import CategorySelector from "./CategorySelector"
@@ -11,6 +11,8 @@ import styled from 'styled-components'
 import Filter from "./Filter"
 import {allCategories} from "../categories/selectors"
 import {loadCategories} from "../categories/thunks"
+import Button from "@material-ui/core/Button"
+import UploadModal from "../upload-transactions/UploadModal"
 
 const TransactionList = ({ transactions = [], accounts = [], categories = [], getRows, startLoadingAccounts, startLoadingTransactions, startLoadingCategories }) => {
 	const [category, setCategory] = useState()
@@ -18,8 +20,10 @@ const TransactionList = ({ transactions = [], accounts = [], categories = [], ge
 	const [numberOfRows, setNumberOfRows] = React.useState()
 	const [pageSize, setPageSize] = React.useState(15)
 	const [selectedAccount, setSelectedAccount] = useState()
+	const [open, setOpen] = useState(false)
 
 	useEffect(() => {
+		startLoadingCategories()
 		startLoadingTransactions(page, category, pageSize, selectedAccount)
 		startLoadingAccounts()
 	}, [])
@@ -68,8 +72,10 @@ const TransactionList = ({ transactions = [], accounts = [], categories = [], ge
 			<FilterDiv> {/* Filters */}
 				<CategorySelector onSelect={setCategory} />
 				<Filter label="Account" options={accounts} handleChange={setSelectedAccount} group={false} />
+				<Button variant="contained" onClick={() => setOpen(true)}>Nieuw</Button>
 			</FilterDiv>
 			<DataGrid rows={rows} columns={columns} page={page} onPageChange={params => handlePageChange(params.page)} pagination rowCount={numberOfRows} rowsPerPageOptions={[15, 25, 50]} pageSize={pageSize} onPageSizeChange={(size) => setPageSize(size)} paginationMode="server" zIndex={10} />
+			<UploadModal open={open} setOpen={setOpen}/>
 		</div>
 	)
 }
@@ -89,3 +95,4 @@ const mapDispatchToProps = dispatch => ({
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(TransactionList)
+

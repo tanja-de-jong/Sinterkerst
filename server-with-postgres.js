@@ -76,7 +76,6 @@ const getTotalAmountForCategory = async (request, response) => {
 			throw error
 		}
 
-		console.log(results.rows)
 		response.status(200).json(results.rows)
 	})
 }
@@ -126,7 +125,6 @@ const getTransactions = async (request, response) => {
 		query += ' OFFSET ' + offset + ' ROWS FETCH NEXT ' + limit + ' ROWS ONLY'
 	}
 
-	console.log(query)
 	pool.query(query, (error, results) => {
 		if (error) {
 			throw error

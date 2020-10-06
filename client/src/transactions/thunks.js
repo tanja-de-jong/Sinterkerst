@@ -41,8 +41,6 @@ export const getPagesRequest = (category) => async (dispatch) => {
 export const getRowsRequest = (category) => async (dispatch) => {
 	try {
 		let url = "/api/transactions/rows"
-		console.log("Category")
-		console.log(category)
 		if (category) url = url + '?category=' + category
 
 		const response = await fetch(url)
@@ -59,7 +57,6 @@ export const getAmountsRequest = (accounts, categories) => async (dispatch) => {
 		const amounts = await response.json()
 		dispatch(getAmounts(amounts))
 	} catch (e) {
-		dispatch(displayAlert(e))
 	}
 }
 
@@ -69,12 +66,10 @@ export const getAmountRequest = (category) => async (dispatch) => {
 		const amount = await response.json()
 		return amount
 	} catch (e) {
-		dispatch(displayAlert(e))
 	}
 }
 
 export const loadTransactions = (page, category, limit, account, token) => async (dispatch) => {
-	console.log("Load transactions")
 	try {
 		dispatch(loadTransactionsInProgress())
 		let url = "/api/transactions?page=" + page

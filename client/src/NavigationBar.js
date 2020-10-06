@@ -1,6 +1,6 @@
 import React from 'react'
 import './App.css';
-import UploadForm from "./upload-transactions/UploadForm"
+import UploadForm from "./upload-transactions/UploadModal"
 import {
   BrowserRouter as Router,
   Switch,

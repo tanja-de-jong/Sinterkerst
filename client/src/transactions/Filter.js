@@ -9,7 +9,6 @@ const Filter = ({ options, label, selected, handleChange, group }) => {
 		props.groupBy = option => option.group
 	}
 
-debugger
 	return (
 		<Autocomplete
 			value={selected}
