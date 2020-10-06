@@ -129,5 +129,5 @@ const LogoutButton = () => {
 }
 
 const ProtectedRoute = ({ component, ...args }) => (
-  <Route component={withAuthenticationRequired(component)} {...args} />
+  <Route component={component} {...args} />
 );
