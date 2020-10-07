@@ -4,7 +4,7 @@ const Rule = ({ rule }) => {
 
 	return (
 		<div>
-			{rule.description}
+			{rule.name}
 		</div>
 	)
 }
