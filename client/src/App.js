@@ -53,7 +53,7 @@ const theme = createMuiTheme({
 
 const App = () => {
   const [ tokenRegistered, setTokenRegistered ] = useState(false)
-  const { isAuthenticated, isLoading, getAccessTokenSilently } = useAuth0();
+  const { loginWithRedirect, isAuthenticated, isLoading, getAccessTokenSilently } = useAuth0();
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -72,7 +72,7 @@ const App = () => {
   const classes = useStyles();
 
   if (isLoading) return <div>Loading...</div>
-  if (!isAuthenticated) return <div><LoginScreen /></div>
+  if (!isAuthenticated) return loginWithRedirect()
 
   if (tokenRegistered) {
     return (
@@ -99,13 +99,3 @@ const App = () => {
 }
 
 export default hot(module)(App);
-
-const LoginScreen = () => {
-  return <LoginButton/>
-}
-
-const LoginButton = () => {
-  const { loginWithRedirect } = useAuth0();
-
-  return <button onClick={() => loginWithRedirect()}>Log In</button>;
-}

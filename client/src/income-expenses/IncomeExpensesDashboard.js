@@ -12,8 +12,7 @@ import CategorySelector from "../transactions/CategorySelector"
 import {withAuthenticationRequired} from "@auth0/auth0-react"
 import TransactionList from "../transactions/TransactionList"
 
-const IncomeExpensesDashboard = ({ allCategories = [], transactions = [], amounts, getAmounts, startLoadingTransactions }) => {
-
+const IncomeExpensesDashboard = ({ allCategories = [], transactions = [], amounts, getAmounts, startLoadingTransactions, startLoadingCategories, startLoadingAmounts }) => {
 	const [category, setCategory] = useState()
 	const [descendants, setDescendants] = useState([])
 	const [loading, setLoading] = useState(false)

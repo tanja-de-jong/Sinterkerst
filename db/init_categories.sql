@@ -92,6 +92,7 @@ INSERT INTO categories (id, name) VALUES (71, 'Spaarrekening');
 INSERT INTO categories (id, name) VALUES (72, 'Ongecategoriseerd');
 INSERT INTO categories (id, name) VALUES (73, 'Van/naar gezamenlijk');
 INSERT INTO categories (id, name) VALUES (74, 'Lening');
+INSERT INTO categories (id, name) VALUES (1, 'Hondenbelasting');
 
 UPDATE categories SET parent = 35 WHERE id = 90;
 UPDATE categories SET parent = 4 WHERE id = 5;
@@ -185,3 +186,4 @@ UPDATE categories SET parent = 70 WHERE id = 71;
 UPDATE categories SET parent = 70 WHERE id = 72;
 UPDATE categories SET parent = 70 WHERE id = 73;
 UPDATE categories SET parent = 70 WHERE id = 74;
+UPDATE categories SET parent = 29 WHERE id = 1;

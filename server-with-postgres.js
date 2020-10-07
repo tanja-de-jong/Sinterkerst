@@ -120,11 +120,12 @@ const getTransactions = async (request, response) => {
 	} else if (account) {
 		query += ' WHERE transactions.account = ' + account
 	}
+	query += ' ORDER BY transactions.date DESC'
 	if (page) {
 		const offset = (page - 1) * limit
 		query += ' OFFSET ' + offset + ' ROWS FETCH NEXT ' + limit + ' ROWS ONLY'
 	}
-
+console.log(query)
 	pool.query(query, (error, results) => {
 		if (error) {
 			throw error

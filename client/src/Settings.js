@@ -12,6 +12,4 @@ const Settings = () => {
 	)
 }
 
-export default withAuthenticationRequired(Settings, {
-	onRedirecting: () => "Loading...",
-})
+export default Settings

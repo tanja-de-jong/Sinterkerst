@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {getRowsRequest, loadTransactions, uploadFile} from "./thunks"
+import {getRowsRequest, loadTransactions, setCategoryRequest, uploadFile} from "./thunks"
 import {connect} from "react-redux"
 import {allTransactions, pages} from "./selectors"
 import CategorySelector from "./CategorySelector"
@@ -13,14 +13,17 @@ import {allCategories} from "../categories/selectors"
 import {loadCategories} from "../categories/thunks"
 import Button from "@material-ui/core/Button"
 import UploadModal from "../upload-transactions/UploadModal"
+import Dialog from "@material-ui/core/Dialog/Dialog"
+import TextField from "@material-ui/core/TextField/TextField"
 
-const TransactionList = ({ transactions = [], accounts = [], categories = [], getRows, startLoadingAccounts, startLoadingTransactions, startLoadingCategories }) => {
+const TransactionList = ({ transactions = [], accounts = [], categories = [], getRows, startLoadingAccounts, startLoadingTransactions, startLoadingCategories, setCategoryRequest }) => {
 	const [category, setCategory] = useState()
 	const [page, setPage] = React.useState(1)
 	const [numberOfRows, setNumberOfRows] = React.useState()
 	const [pageSize, setPageSize] = React.useState(15)
 	const [selectedAccount, setSelectedAccount] = useState()
 	const [open, setOpen] = useState(false)
+	const [selectedRow, setSelectedRow] = useState()
 
 	useEffect(() => {
 		startLoadingCategories()
@@ -74,8 +77,22 @@ const TransactionList = ({ transactions = [], accounts = [], categories = [], ge
 				<Filter label="Account" options={accounts} handleChange={setSelectedAccount} group={false} />
 				<Button variant="contained" onClick={() => setOpen(true)}>Nieuw</Button>
 			</FilterDiv>
-			<DataGrid rows={rows} columns={columns} page={page} onPageChange={params => handlePageChange(params.page)} pagination rowCount={numberOfRows} rowsPerPageOptions={[15, 25, 50]} pageSize={pageSize} onPageSizeChange={(size) => setPageSize(size)} paginationMode="server" zIndex={10} />
+			<DataGrid
+				rows={rows}
+				columns={columns}
+				page={page}
+				onPageChange={params => handlePageChange(params.page)}
+				pagination
+				rowCount={numberOfRows}
+				rowsPerPageOptions={[15, 25, 50]}
+				pageSize={pageSize}
+				onPageSizeChange={(size) => setPageSize(size)}
+				paginationMode="server"
+				zIndex={10}
+				onRowClick={(row) => setSelectedRow(row.rowModel.data.id)}
+			/>
 			<UploadModal open={open} setOpen={setOpen}/>
+			<CategoryModal row={selectedRow} toggle={setSelectedRow} setCategory={setCategoryRequest}/>
 		</div>
 	)
 }
@@ -92,7 +109,19 @@ const mapDispatchToProps = dispatch => ({
 	getRows: (category) => dispatch(getRowsRequest(category)),
 	startLoadingAccounts: () => dispatch(loadAccounts()),
 	startLoadingCategories: () => dispatch(loadCategories()),
+	setCategory: (transaction, category) => dispatch(setCategoryRequest(transaction, category)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(TransactionList)
+
+const CategoryModal = ({transactionId, toggle, setCategory}) => {
+	const handleChange = (categoryId) => {
+		console.log(transactionId)
+		console.log(categoryId)
+	}
+
+	return <Dialog open={transactionId} onClose={() => toggle()}>
+		<CategorySelector onSelect={handleChange} />
+	</Dialog>
+}
 
