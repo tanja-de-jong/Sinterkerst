@@ -198,7 +198,9 @@ const applyRules = async (request, response) => {
 
 	pool.query('SELECT * FROM transactions', [], async (error, response) => {
 		if (error) throw error
-		for (const transaction in response.rows) {
+		console.log(response.rows)
+		for (const transaction of response.rows) {
+			console.log(transaction)
 			const success = await applyRulesOnTransaction(transaction)
 			if (success) {
 				updatedTransactions.push(transaction)
@@ -366,7 +368,7 @@ app.route('/api/transactions/set-category')
 app.route('/api/transactions/upload')
 	.post(upload.single('transactionList'), uploadFile)
 
-app.route('/api/transactions/apply-rules')
+app.route('/api/apply_rules')
 	.put(applyRules)
 
 app.route('/api/transactions/amounts')
@@ -455,8 +457,11 @@ const applyRulesOnTransaction = async (transaction) => {
 const ruleIsValid = (transaction, comparisons) => {
 	let allComparisonsTrue = true
 	comparisons.forEach(comparison => {
+		console.log(comparison)
 		const {field, type, text} = comparison
-		if (!transaction[field].toLowerCase().includes(text.toLowerCase())) {	// TODO: actually use'type' instead of hardcoded 'includes'
+		console.log(transaction)
+		console.log(transaction[field])
+		if (!transaction[field].toString().toLowerCase().includes(text.toLowerCase())) {	// TODO: actually use'type' instead of hardcoded 'includes'
 			allComparisonsTrue = false
 		}
 	})
