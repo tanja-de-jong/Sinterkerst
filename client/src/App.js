@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import { hot } from 'react-hot-loader'
 import './App.css';
-import { BrowserRouter as Router } from "react-router-dom";
+import {BrowserRouter as Router, Link} from "react-router-dom"
 import AppBar from "@material-ui/core/AppBar"
 import {makeStyles} from "@material-ui/core/styles"
 import Toolbar from "@material-ui/core/Toolbar"
@@ -77,21 +77,19 @@ const App = () => {
   if (tokenRegistered) {
     return (
       <Router>
-      <ThemeProvider theme={theme}>
-        <div className={classes.root}>
-            <AppBar position="fixed" className={classes.appBar}>
-              <Toolbar>
-                  <Typography variant="h6" className={classes.title}>
-                    Money Manager
-                  </Typography>
-              </Toolbar>
-            </AppBar>
-          <NavigationBar />
-        </div>
-      </ThemeProvider>
+        <ThemeProvider theme={theme}>
+          <div className={classes.root}>
+              <AppBar position="fixed" className={classes.appBar}>
+                <Toolbar>
+                    <Typography variant="h6" className={classes.title}>
+                      <Link to="/">Money Manager</Link>
+                    </Typography>
+                </Toolbar>
+              </AppBar>
+            <NavigationBar />
+          </div>
+        </ThemeProvider>
       </Router>
-
-
     )
   } else {
     return "Loading..."

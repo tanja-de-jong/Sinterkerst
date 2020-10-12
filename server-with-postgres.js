@@ -125,11 +125,26 @@ const getTransactions = async (request, response) => {
 		const offset = (page - 1) * limit
 		query += ' OFFSET ' + offset + ' ROWS FETCH NEXT ' + limit + ' ROWS ONLY'
 	}
-console.log(query)
 	pool.query(query, (error, results) => {
 		if (error) {
 			throw error
 		}
+		response.status(200).json(results.rows)
+	})
+}
+
+const getExpenses = (request, response) => {
+	console.log("API: Get expenses")
+	let { start, end } = request.query
+	let query = 'SELECT account, sum(amount) FROM transactions'
+	query += ' WHERE date >= \'' + start + '\' AND date <= \'' + end + '\' AND amount < 0 AND category != 71 AND category != 73 GROUP BY account'
+	console.log(query)
+
+	pool.query(query, (error, results) => {
+		if (error) {
+			throw error
+		}
+
 		response.status(200).json(results.rows)
 	})
 }
@@ -172,7 +187,8 @@ const uploadFile = (request, response) => {
 					const newTransactions = []
 					 for (let transaction of transactions) {
 						transaction = processFields(transaction, account.id)
-						await applyRulesOnTransaction(transaction)
+						 const rules = await pool.query('SELECT * FROM rules')
+						 await applyRulesOnTransaction(rules, transaction)
 						await pool.query('INSERT INTO transactions (date, description, account, otheraccount, code, amount, mutation, remarks, category) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *',
 							[transaction.date, transaction.description, transaction.account, transaction.otheraccount, transaction.code, transaction.amount, transaction.mutation, transaction.remarks, transaction.category],
 							(error, results) => {
@@ -196,18 +212,16 @@ const applyRules = async (request, response) => {
 	const updatedTransactions = []
 	const failedTransactions = []
 
-	pool.query('SELECT * FROM transactions', [], async (error, response) => {
+	pool.query('SELECT * FROM transactions', [], async (error, result) => {
 		if (error) throw error
-		console.log(response.rows)
-		for (const transaction of response.rows) {
-			console.log(transaction)
+		for (const transaction of result.rows) {
 			const success = await applyRulesOnTransaction(transaction)
-			if (success) {
+			if (success) { // TODO
 				updatedTransactions.push(transaction)
 			} else {
 				failedTransactions.push(transaction)
 			}
-			pool.query('UPDATE transactions SET category = $1 WHERE id = $2', [transaction.category, transaction.id])
+			pool.query('UPDATE transactions SET category = $1, typeofrule = $2 WHERE id = $3', [transaction.category, transaction.typeOfRule, transaction.id])
 		}
 
 		response.status(200).json({ updatedTransactions, failedTransactions })
@@ -359,6 +373,9 @@ app.route('/api/transactions')
 app.route('/api/transactions/amount')
 	.get(getTotalAmountForCategory)
 
+app.route('/api/expenses')
+	.get(getExpenses)
+
 app.route('/api/transactions/rows')
 	.get(getNumberOfRows)
 
@@ -431,21 +448,27 @@ const processFields = (transaction, accountId) => {
 	return transaction
 }
 
+const applyRulesOnTransactions = () => {} // TODO
+
 const applyRulesOnTransaction = async (transaction) => {
+	let appliedRule
 	const rules = await pool.query('SELECT * FROM rules')
 	const categories = []
+	let comparisons
 	for (const rule of rules.rows) {
-		const comparisons = await pool.query('SELECT * FROM comparisons WHERE rule = $1', [rule.id])
+		comparisons = await pool.query('SELECT * FROM comparisons WHERE rule = $1', [rule.id])
 		const valid = ruleIsValid(transaction, comparisons.rows)
 		if (valid && !categories.includes(rule.category)) {
 			categories.push(rule.category)
+			appliedRule = rule
 		}
 	}
 
 	if (categories.length === 1) {
 		transaction.category = categories[0]
+		transaction.typeOfRule = appliedRule.type
 	} else {
-		transaction.category = 72	// Ongecategoriseerd
+		if (!transaction.category) transaction.category = 72	// Ongecategoriseerd, do not overwrite if category is already set
 		if (categories.length > 0) {
 			return false
 			console.log("Transaction " + transaction.id + " has multiple categories: " + categories)
@@ -455,12 +478,13 @@ const applyRulesOnTransaction = async (transaction) => {
 }
 
 const ruleIsValid = (transaction, comparisons) => {
+	if (comparisons.length === 0) {
+		console.log("No comparisons!")
+		return false
+	}
 	let allComparisonsTrue = true
 	comparisons.forEach(comparison => {
-		console.log(comparison)
 		const {field, type, text} = comparison
-		console.log(transaction)
-		console.log(transaction[field])
 		if (!transaction[field].toString().toLowerCase().includes(text.toLowerCase())) {	// TODO: actually use'type' instead of hardcoded 'includes'
 			allComparisonsTrue = false
 		}

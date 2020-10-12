@@ -14,7 +14,6 @@ import {loadCategories} from "../categories/thunks"
 import Button from "@material-ui/core/Button"
 import UploadModal from "../upload-transactions/UploadModal"
 import Dialog from "@material-ui/core/Dialog/Dialog"
-import TextField from "@material-ui/core/TextField/TextField"
 
 const TransactionList = ({ transactions = [], accounts = [], categories = [], getRows, startLoadingAccounts, startLoadingTransactions, startLoadingCategories, setCategoryRequest }) => {
 	const [category, setCategory] = useState()
@@ -23,7 +22,7 @@ const TransactionList = ({ transactions = [], accounts = [], categories = [], ge
 	const [pageSize, setPageSize] = React.useState(15)
 	const [selectedAccount, setSelectedAccount] = useState()
 	const [open, setOpen] = useState(false)
-	const [selectedRow, setSelectedRow] = useState()
+	const [selectedRow, setSelectedRow] = useState(null)
 
 	useEffect(() => {
 		startLoadingCategories()
@@ -38,12 +37,13 @@ const TransactionList = ({ transactions = [], accounts = [], categories = [], ge
 
 	const handlePageChange = (page) => {
 		setPage(page);
-		startLoadingTransactions(page, category, pageSize)
+		startLoadingTransactions(page, category, pageSize, selectedAccount)
 	}
 
 	const columns = [
 		{ field: 'id', headerName: 'ID', width: 100, hide: true},
 		{ field: 'category', headerName: 'Categorie', width: 200},
+		{ field: 'assigned', headerName: 'Gekozen', width: 200},
 	  { field: 'account', headerName: 'Account', width: 100 },
 	  { field: 'description', headerName: 'Omschrijving', width: 300 },
 	  { field: 'date', headerName: 'Datum', width: 200 },
@@ -54,11 +54,19 @@ const TransactionList = ({ transactions = [], accounts = [], categories = [], ge
 	const rows = transactions.map(transaction => {
 		const account = accounts.find(account => account.id === transaction.account).name
 		const category = categories.find(category => category.id === transaction.category).name
+		const assigned = transaction.category === 72 ?
+			'' :
+			transaction.typeofrule === 'FIXED' ?
+				'Vast' :
+				transaction.typeofrule === 'SUGGESTION' ?
+					'Suggestie' :
+					'Handmatig'
 
 		return {
 			id: transaction.id,
-			category: category,
-			account: account,
+			category,
+			assigned,
+			account,
 			description: transaction.description,
 			date: moment(transaction.date, "YYYYMMDD").locale("nl").format("DD MMMM YYYY"),
 			amount: "€ " + transaction.amount.toFixed(2).replace(".", ","),
@@ -92,7 +100,7 @@ const TransactionList = ({ transactions = [], accounts = [], categories = [], ge
 				onRowClick={(row) => setSelectedRow(row.rowModel.data.id)}
 			/>
 			<UploadModal open={open} setOpen={setOpen}/>
-			<CategoryModal row={selectedRow} toggle={setSelectedRow} setCategory={setCategoryRequest}/>
+			<CategoryModal transactionId={selectedRow} toggle={setSelectedRow} setCategory={setCategoryRequest}/>
 		</div>
 	)
 }
@@ -109,18 +117,19 @@ const mapDispatchToProps = dispatch => ({
 	getRows: (category) => dispatch(getRowsRequest(category)),
 	startLoadingAccounts: () => dispatch(loadAccounts()),
 	startLoadingCategories: () => dispatch(loadCategories()),
-	setCategory: (transaction, category) => dispatch(setCategoryRequest(transaction, category)),
+	setCategoryRequest: (transaction, category) => dispatch(setCategoryRequest(transaction, category)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(TransactionList)
 
-const CategoryModal = ({transactionId, toggle, setCategory}) => {
+const CategoryModal = ({ transactionId, toggle, setCategory }) => {
+
 	const handleChange = (categoryId) => {
-		console.log(transactionId)
-		console.log(categoryId)
+		setCategory(transactionId, categoryId)
+		toggle(null)
 	}
 
-	return <Dialog open={transactionId} onClose={() => toggle()}>
+	return <Dialog open={transactionId !== null} onClose={() => toggle(null)}>
 		<CategorySelector onSelect={handleChange} />
 	</Dialog>
 }

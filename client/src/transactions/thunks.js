@@ -69,6 +69,15 @@ export const getAmountRequest = (category) => async (dispatch) => {
 	}
 }
 
+export const getExpenses = (start, end) => async (dispatch) => {
+	try {
+		const response = await fetch("/api/expenses?start=" + start + "&end=" + end)
+		const expenses = await response.json()
+		return expenses
+	} catch (e) {
+	}
+}
+
 export const loadTransactions = (page, category, limit, account, token) => async (dispatch) => {
 	try {
 		dispatch(loadTransactionsInProgress())
@@ -106,7 +115,7 @@ export const loadTransactionsNoPagination = (category) => async (dispatch) => {
 export const setCategoryRequest = (transactionId, categoryId) => async dispatch => {
 	try {
 		const body = JSON.stringify({ transactionId, categoryId })
-		const response = await fetch('/api/set-category', {
+		const response = await fetch('/api/transactions/set-category', {
 			headers: {
 				'Content-Type': 'application/json'
 			},

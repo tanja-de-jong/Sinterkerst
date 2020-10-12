@@ -59,64 +59,65 @@ const NavigationBar = () => {
   const classes = useStyles();
 
   return (
-    <Router>
-      <div>
-        <Drawer
-          className={classes.drawer}
-          variant="permanent"
-          classes={{
-            paper: classes.drawerPaper,
-          }}
-        >
-          <Toolbar />
-          <div className={classes.drawerContainer}>
-            <List className={classes.list} role="presentation">
-              <ListItem button component={Link} to="/transactions">
-                {/*<ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>*/}
-                <ListItemText primary="Transacties" />
-              </ListItem>
-              <ListItem button component={Link} to="/overview">
-                {/*<ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>*/}
-                <ListItemText primary="Overzicht" />
-              </ListItem>
-              <ListItem button component={Link} to="/settings">
-                {/*<ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>*/}
-                <ListItemText primary="Instellingen" />
-              </ListItem>
-              <ListItem>
-                <LogoutButton/>
-              </ListItem>
-            </List>
-          </div>
-        </Drawer>
+    <div>
+      <Drawer
+        className={classes.drawer}
+        variant="permanent"
+        classes={{
+          paper: classes.drawerPaper,
+        }}
+      >
+        <Toolbar />
+        <div className={classes.drawerContainer}>
+          <List className={classes.list} role="presentation">
+            <ListItem button component={Link} to="/transactions">
+              {/*<ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>*/}
+              <ListItemText primary="Transacties" />
+            </ListItem>
+            <ListItem button component={Link} to="/overview">
+              {/*<ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>*/}
+              <ListItemText primary="Overzicht" />
+            </ListItem>
+            <ListItem button component={Link} to="/settings">
+              {/*<ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>*/}
+              <ListItemText primary="Instellingen" />
+            </ListItem>
+            <ListItem>
+              <LogoutButton/>
+            </ListItem>
+          </List>
+        </div>
+      </Drawer>
 
-        <div className={classes.content}>
-          <div className={classes.appBarSpacer} />
-          <div className={classes.container}>
-            <Switch>
-              <ProtectedRoute path="/upload">
-                <UploadForm/>
-              </ProtectedRoute>
-              <ProtectedRoute path="/transactions">
-                <TransactionOverview/>
-              </ProtectedRoute>
-              <ProtectedRoute path="/overview">
-                <IncomeExpensesDashboard/>
-              </ProtectedRoute>
-              <ProtectedRoute path="/settings">
-                <Settings/>
-              </ProtectedRoute>
-              <ProtectedRoute path="/login">
-                <Dashboard/>
-              </ProtectedRoute>
-              <ProtectedRoute path="/">
-                <Dashboard/>
-              </ProtectedRoute>
-            </Switch>
-          </div>
+      <div className={classes.content}>
+        <div className={classes.appBarSpacer} />
+        <div className={classes.container}>
+          <Switch>
+            <Route path="/upload">
+              <UploadForm/>
+            </Route>
+            <Route path="/transactions">
+              <TransactionOverview/>
+            </Route>
+            <Route path="/overview">
+              <IncomeExpensesDashboard/>
+            </Route>
+            <Route path="/settings">
+              <Settings/>
+            </Route>
+            <Route path="/login">
+              <Dashboard/>
+            </Route>
+            <Route path="/">
+              <Dashboard/>
+            </Route>
+            <Route path="">
+              <Dashboard/>
+            </Route>
+          </Switch>
         </div>
       </div>
-    </Router>
+    </div>
   )
 }
 
@@ -127,7 +128,3 @@ const LogoutButton = () => {
 
   return <button onClick={() => logout({ returnTo: window.location.origin })}>Log Out</button>
 }
-
-const ProtectedRoute = ({ component, ...args }) => (
-  <Route component={component} {...args} />
-);
