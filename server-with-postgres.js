@@ -262,11 +262,11 @@ const getCategories = (request, response) => {
 
 const updateCategory = (request, response) => {
 	console.log("API: Update category")
-	const {id, name, parent} = request.body
+	const {id, name, parent, budget, budgetPeriod} = request.body
 	if (id && name) {
 		pool.query(
-			'UPDATE categories SET name = $2, parent = $3 WHERE id = $1 RETURNING *',
-			[id, name, parent],
+			'UPDATE categories SET name = $2, parent = $3, budget = $4, budgetperiod = $5 WHERE id = $1 RETURNING *',
+			[id, name, parent, budget, budgetPeriod],
 			(error, results) => {
 				if (error) {
 					throw error
@@ -280,11 +280,11 @@ const updateCategory = (request, response) => {
 
 const postCategory = (request, response) => {
 	console.log("API: Post category")
-	const {name, parent} = request.body
+	const {name, parent, budget, budgetPeriod} = request.body
 	if (name) {
 		pool.query(
-			'INSERT INTO categories (name, parent) VALUES ($1, $2) RETURNING *',
-			[name, parent],
+			'INSERT INTO categories (name, parent, budget, budgetperiod) VALUES ($1, $2, $3, $4) RETURNING *',
+			[name, parent, budget, budgetPeriod],
 			(error, results) => {
 				if (error) {
 					throw error

@@ -35,7 +35,7 @@ const Category = ({ category, categories, children }) => {
 	 const [edit, setEdit] = useState(false)
 
 	let label = <div>
-		{category.name} ({category.id})
+		{category.name} ({category.id}): {category.budget}
 		<EditIcon onClick={() => setEdit(true)}/>
 	</div>
 
@@ -46,7 +46,7 @@ const Category = ({ category, categories, children }) => {
 
 		<Modal open={edit} onClose={() => setEdit(false)}>
 			<div style={modalStyle} className={classes.paper}>
-				<AddOrUpdateCategory category={category} categories={categories} />
+				<AddOrUpdateCategory category={category} categories={categories} close={() => setEdit(false)} />
 			</div>
 		</Modal>
 	</div>

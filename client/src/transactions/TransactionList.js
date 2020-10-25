@@ -47,7 +47,7 @@ const TransactionList = ({ transactions = [], accounts = [], categories = [], ge
 	  { field: 'account', headerName: 'Account', width: 100 },
 	  { field: 'description', headerName: 'Omschrijving', width: 300 },
 	  { field: 'date', headerName: 'Datum', width: 200 },
-	  { field: 'amount', headerName: 'Bedrag', width: 100 },
+	  { field: 'amount', headerName: 'Bedrag', width: 200 },
 	  { field: 'remarks', headerName: 'Opmerkingen', width: 1000 },
 	]
 

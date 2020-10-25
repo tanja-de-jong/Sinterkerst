@@ -7,7 +7,6 @@ import {
   Route,
   Link
 } from "react-router-dom";
-import Dashboard from "./transactions/Dashboard"
 import TransactionOverview from "./transactions/TransactionOverview"
 import IncomeExpensesDashboard from "./income-expenses/IncomeExpensesDashboard"
 import Settings from "./Settings"
@@ -19,6 +18,7 @@ import ListItemText from "@material-ui/core/ListItemText/ListItemText"
 import {makeStyles} from "@material-ui/core/styles"
 import {useAuth0} from "@auth0/auth0-react"
 import {withAuthenticationRequired} from "@auth0/auth0-react"
+import Dashboard from "./dashboard/Dashboard"
 
 const drawerWidth = 240;
 
@@ -39,6 +39,7 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     height: '100vh',
     overflow: 'auto',
+    backgroundColor: '#eff0f6'
   },
   container: {
     marginLeft: drawerWidth,

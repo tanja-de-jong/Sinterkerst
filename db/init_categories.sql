@@ -66,7 +66,7 @@ INSERT INTO categories (id, name) VALUES (75, 'Hobby''s');
 INSERT INTO categories (id, name) VALUES (46, 'KNMV');
 INSERT INTO categories (id, name) VALUES (47, 'Verzorgingsproducten');
 INSERT INTO categories (id, name) VALUES (48, 'Parkeren');
-INSERT INTO categories (id, name) VALUES (491, 'ANWB');
+INSERT INTO categories (id, name) VALUES (49, 'ANWB');
 INSERT INTO categories (id, name) VALUES (50, 'Boetes');
 INSERT INTO categories (id, name) VALUES (51, 'Rijlessen');
 INSERT INTO categories (id, name) VALUES (52, 'Zaalvoetbal');

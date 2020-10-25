@@ -21,9 +21,9 @@ export const loadCategories = (token) => async (dispatch) => {
 	}
 }
 
-export const addCategoryRequest = (name, parent) => async dispatch => {
+export const addCategoryRequest = (name, parent, budget, budgetPeriod) => async dispatch => {
 	try {
-		const body = JSON.stringify({ name, parent })
+		const body = JSON.stringify({ name, parent, budget, budgetPeriod })
 		const response = await fetch('/api/categories', {
 			headers: {
 				'Content-Type': 'application/json'
@@ -38,9 +38,14 @@ export const addCategoryRequest = (name, parent) => async dispatch => {
 	}
 }
 
-export const updateCategoryRequest = (id, name, parent) => async dispatch => {
+export const updateCategoryRequest = (id, name, parent, budget, budgetPeriod) => async dispatch => {
+	console.log("Budget")
+	console.log(budget)
+	console.log("Budget period")
+	console.log(budgetPeriod)
+
 	try {
-		const body = JSON.stringify({id, name, parent})
+		const body = JSON.stringify({id, name, parent, budget, budgetPeriod})
 		const response = await fetch('/api/categories', {
 			headers: {
 				'Content-Type': 'application/json'

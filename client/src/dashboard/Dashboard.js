@@ -1,18 +1,12 @@
 import React, {useEffect, useState} from 'react'
-import {getAmountRequest, getExpenses, getRowsRequest, loadTransactions} from "./thunks"
+import {getAmountRequest, getExpenses } from "../transactions/thunks"
 import {connect} from "react-redux"
-import {allTransactions, pages, transactionsLoading} from "./selectors"
-import {useAuth0} from "@auth0/auth0-react"
 import {loadAccounts} from "../accounts/thunks"
-import {loadCategories} from "../categories/thunks"
 import Card from "@material-ui/core/Card"
-import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft'
-import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight'
-import MobileStepper from "@material-ui/core/MobileStepper"
 import Button from "@material-ui/core/Button"
 import {KeyboardArrowLeft, KeyboardArrowRight} from "@material-ui/icons"
-import {allCategories} from "../categories/selectors"
 import {allAccounts} from "../accounts/selectors"
+import SummaryCard from "../components/SummaryCard"
 
 const Dashboard = ({getAmount, accounts, startLoadingAccounts, getExpenses}) => {
 	const thisMonth = new Date()
@@ -88,24 +82,21 @@ const Dashboard = ({getAmount, accounts, startLoadingAccounts, getExpenses}) => 
 	} ).reduce((a,b) => a + b, 0)
 	return (
 		<div>
-			<Card variant="outlined">
-				Uitgaven
+			<SummaryCard title="Uitgaven">
 				{backButton}
 				{selectedPeriod.toLocaleString('default', { month: 'long' })} {selectedPeriod.getFullYear()}
 				{nextButton}
 				{expenses.map(expense => {
 					const accountDetails = accounts.find(a => a.id === expense.account)
 					return <AccountCard account={accountDetails}
-											 amount={expense.sum}/>
+															amount={expense.sum}/>
 				})}
 				Totaal: { "€ " + total.toFixed(2).replace(".", ",") }
-			</Card>
-			<Card variant="outlined">
-				Leningen
-			</Card>
-			<Card variant="outlined">
-				Investeringen
-			</Card>
+			</SummaryCard>
+			<SummaryCard title="Leningen">
+			</SummaryCard>
+			<SummaryCard title="Investeringen">
+			</SummaryCard>
 		</div>
 	)
 }

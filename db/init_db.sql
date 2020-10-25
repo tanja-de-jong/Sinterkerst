@@ -17,13 +17,14 @@ CREATE TABLE transactions (
     mutation TEXT,
     remarks TEXT,
     category INT,
-    type TEXT
+    typeofrule TEXT
 );
 
 CREATE TABLE categories (
     ID SERIAL PRIMARY KEY,
     name TEXT NOT NULL,
-    parent INT
+    parent INT,
+    type TEXT /* FIXED, VARIABLE, UNEXPECTED */
 );
 
 CREATE TABLE rules (
