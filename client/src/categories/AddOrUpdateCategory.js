@@ -14,14 +14,15 @@ const AddOrUpdateCategory = ({ category, categories, addCategory, updateCategory
 
 	const [name, setName] = useState(category ? category.name : "")
 	const [parent, setParent] = useState(category ? category.parent || null : null)
+	const [type, setType] = useState(category ? category.type || null : null)
 	const [budget, setBudget] = useState(category ? category.budget || 0 : 0)
 	const [budgetPeriod, setBudgetPeriod] = useState(category ? category.budgetperiod || null : null)
 
 	const onSubmitPressed = () => {
 		category ?
-			updateCategory(category.id, name, parent, budget, budgetPeriod)
+			updateCategory(category.id, name, parent, type, budget, budgetPeriod)
 			:
-			addCategory(name, parent, budget, budgetPeriod)
+			addCategory(name, parent, type, budget, budgetPeriod)
 		if (close) close()
 	}
 
@@ -31,7 +32,15 @@ const AddOrUpdateCategory = ({ category, categories, addCategory, updateCategory
 
 			<CategorySelector selected={parent} onSelect={setParent} />
 
-			<InputLabel htmlFor="standard-adornment-amount">Amount</InputLabel>
+			<Autocomplete
+				value={type}
+				options={["FIXED", "VARIABLE", "UNEXPECTETD"]}
+				renderInput={(params) => <TextField {...params} label="Type" variant="outlined"/>}
+				onChange={(event, newValue) => setType(newValue)}
+				style={{ width: 300 }}
+			/>
+
+			<InputLabel htmlFor="standard-adornment-amount">Budget</InputLabel>
 			<Input
 				id="standard-adornment-amount"
 				value={budget}

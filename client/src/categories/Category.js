@@ -35,7 +35,7 @@ const Category = ({ category, categories, children }) => {
 	 const [edit, setEdit] = useState(false)
 
 	let label = <div>
-		{category.name} ({category.id}): {category.budget}
+		{category.name} ({category.id}): {category.budget} ({category.type})
 		<EditIcon onClick={() => setEdit(true)}/>
 	</div>
 

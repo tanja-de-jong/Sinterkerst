@@ -10,26 +10,36 @@ import {
 	incomeCategories,
 	savingsCategories
 } from "./selectors"
+import Card from "@material-ui/core/Card"
+import {makeStyles} from "@material-ui/core/styles"
 
-// CategoryList
-	// Edit category
-	// Delete category
-// Add Category
+const useStyles = makeStyles((theme) => ({
+	card: {
+		borderRadius: '25px',
+		width: '500px',
+		padding: '10px',
+		margin: '10px'
+	},
+	page: {
+		display: 'flex'
+	}
+}))
+
 const CategorySettings = ({ expensesCategories, incomeCategories, savingsCategories, categoriesByTopLevel }) => {
+	const classes = useStyles();
 
 	const renderTopLevelCategory = (topLevel) => {
 		return (
-			<div>
+			<Card className={classes.card}>
 				<h2>{topLevel.category.name}</h2>
 				<CategoryList categories={topLevel.children} topLevel={topLevel.category} />
 				<AddOrEditCategory categories={topLevel.children} />
-			</div>
+			</Card>
 		)
 	}
 
 	return (
 		<div>
-			<h1>Category settings</h1>
 			{categoriesByTopLevel.map(topLevel => renderTopLevelCategory(topLevel))}
 		</div>
 	)

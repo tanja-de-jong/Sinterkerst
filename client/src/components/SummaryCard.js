@@ -15,7 +15,6 @@ const useStyles = makeStyles((theme) => ({
 const SummaryCard = ({ title, children }) => {
 	const classes = useStyles();
 
-
 	return (
 		<Card className={classes.card}>
 			<h3>{title}</h3>
