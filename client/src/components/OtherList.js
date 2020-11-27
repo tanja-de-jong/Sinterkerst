@@ -8,7 +8,6 @@ import {connect} from "react-redux"
 var React = require('react');
 
 const OtherList = (props) => {
-console.log("OTHER LIST")
   return (
     props.currentUser === -1 ? <Redirect to='/' /> :
     <div>

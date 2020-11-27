@@ -87,16 +87,12 @@ const updateLog = async (request, response) => {
     if (error) {
       throw error
     }
-
-    console.log(res.rows[0])
-
     response.status(200).json(res.rows[0])
   })
 }
 
 const postItem = (request, response) => {
   console.log("API: Post item")
-  console.log(request.body)
   const { owner, name, url, description, createdBy } = request.body
   pool.query('INSERT INTO items (owner, name, url, description, createdBy, checked, checkedBy) VALUES ($1, $2, $3, $4, $5, false, -1) RETURNING *', [owner, name, url, description, createdBy], async (error, res) => {
     if (error) {
@@ -130,7 +126,6 @@ const checkItem = async (request, response) => {
           throw error
         }
         const updatedItem = res.rows[0]
-        console.log(updatedItem)
         const newLog = await generateLogItem(type, updatedItem.id, buyerId)
         const result = { item: updatedItem, log: newLog }
         response.status(200).json(result)

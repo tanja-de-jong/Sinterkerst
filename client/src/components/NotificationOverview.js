@@ -8,7 +8,6 @@ import NotificationList from "./NotificationList"
 import "./NotificationOverview.css"
 
 const NotificationOverview = (props) => {
-	console.log("NOTIFICATION OVERVIEW")
 	return (
 		props.currentUser === -1 ? <Redirect to='/' /> :
 		<div className="notification-overview-container">

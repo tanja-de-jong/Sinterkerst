@@ -10,8 +10,6 @@ const List = ({ owner, allItems, fetchItems }) => {
   useEffect(() => {
     fetchItems()
   }, [])
-  console.log("All items")
-  console.log(allItems)
 
   if (allItems) {
     const items = allItems.filter(item => item.owner === owner)

@@ -12,9 +12,6 @@ const ListItem = ({ item, owner, currentUser, users, toggleCheck }) => {
 
   const handleCheckboxChange = (event) => {
     event.preventDefault();
-    // console.log("Handle check")
-    // console.log(item)
-    // console.log(currentUser)
     toggleCheck(item, currentUser);
   }
 
@@ -60,8 +57,6 @@ const ListItem = ({ item, owner, currentUser, users, toggleCheck }) => {
   const urlElement = url === '' ? '' : <ListItemDescription description={url} />
 
   const listItemClassName = item.checked && currentUser !== owner ? "list-item-container checked" : "list-item-container"
-  console.log(item.checkedby)
-  console.log(users)
 
   return (
       <div className={listItemClassName}>

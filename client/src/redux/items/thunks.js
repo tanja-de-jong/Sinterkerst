@@ -9,8 +9,6 @@ export const fetchItems = () => async (dispatch) => {
 	dispatch(fetchItemsBegin())
 	const response = await fetch(`api/items`)
 	const items = await response.json()
-	console.log("Items")
-	console.log(items)
 	dispatch(fetchItemsSuccess(items))
 }
 
@@ -29,10 +27,6 @@ export const createItem = (item) => async (dispatch) => {
 }
 
 export const toggleCheck = (item, buyerId) => async (dispatch) => {
-	console.log("Handle check")
-	console.log(item)
-	console.log(buyerId)
-
 	const body = JSON.stringify({item, buyerId})
 	const response = await fetch('/api/check', {
 		method: 'POST',
