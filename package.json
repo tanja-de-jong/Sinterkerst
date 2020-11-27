@@ -1,8 +1,8 @@
 {
-  "name": "finances",
+  "name": "sinterkerst",
   "version": "1.0.0",
   "main": "server.js",
-  "repository": "git@bitbucket.org:homeprojectshq/finances.git",
+  "repository": "git@bitbucket.org:homeprojectshq/sinterkerst.git",
   "author": "Tanja de Jong <Tanja@tanjadejong.com>",
   "license": "MIT",
   "engines": {
