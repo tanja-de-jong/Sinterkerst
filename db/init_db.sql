@@ -1,43 +1,25 @@
-CREATE TABLE accounts (
-    ID SERIAL PRIMARY KEY,
-    name TEXT,
-    iban TEXT NOT NULL,
-    factor REAL,
-    updated DATE
-);
-
-CREATE TABLE transactions (
-    ID SERIAL PRIMARY KEY,
-    date DATE,
-    description TEXT,
-    account INT NOT NULL,
-    otherAccount TEXT,
-    code CHAR(2),
-    amount REAL,
-    mutation TEXT,
-    remarks TEXT,
-    category INT,
-    typeofrule TEXT
-);
-
-CREATE TABLE categories (
+CREATE TABLE users (
     ID SERIAL PRIMARY KEY,
     name TEXT NOT NULL,
-    parent INT,
-    type TEXT /* FIXED, VARIABLE, UNEXPECTED */
+    password TEXT NOT NULL,
+    log INT
 );
 
-CREATE TABLE rules (
+CREATE TABLE items (
     ID SERIAL PRIMARY KEY,
-    name TEXT,
-    category INT,
-    type TEXT
+    owner INT NOT NULL,
+    name TEXT NOT NULL,
+    url TEXT,
+    description TEXT,
+    createdBy INT,
+    checked BOOL,
+    checkedBy INT
 );
 
-CREATE TABLE comparisons (
+CREATE TABLE log (
     ID SERIAL PRIMARY KEY,
-    field TEXT,
     type TEXT,
-    text TEXT,
-    rule INT
+    item INT,
+    committer INT,
+    date DATE
 );

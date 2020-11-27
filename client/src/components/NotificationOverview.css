@@ -1,0 +1,11 @@
+.notification-list-container {
+    padding: 0 30px 30px 30px;
+}
+
+.notification-overview-container {
+    /*background-color: #00b3b3;*/
+    /*color: white;*/
+}
+
+.notification-list-container .date {
+    color: #777777;}

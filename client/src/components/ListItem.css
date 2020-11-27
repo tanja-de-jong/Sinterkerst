@@ -1,0 +1,74 @@
+.list-item-container {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    border: solid;
+    border-width: 1px;
+    border-color: #008B8B;
+    /*height: 10vw;*/
+    width: 100%;
+    /*max-height: 200px;*/
+    /*max-width: 200px;*/
+    /*min-height: 84px;*/
+    /*min-width: 84px;*/
+    margin: 10px;
+    border-radius: 10px;
+}
+
+.checked {
+    opacity: 0.5
+}
+
+.list-item-header {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    /*height: 10vw;*/
+    width: 100%;
+    /*max-height: 200px;*/
+    /*max-width: 200px;*/
+    /*min-height: 84px;*/
+    /*min-width: 84px;*/
+    display: flex;
+    flex-direction: column;
+    background-color: #008B8B;
+    color: white;
+    padding: 10px;
+    font-size: 1.5vw;
+}
+
+.checked-title {
+    text-decoration: line-through;
+}
+
+.checked-by {
+    font-style: italic;
+    font-size: small
+}
+
+.list-item-footer {
+    display: flex;
+    margin: 10px;
+    margin-top: 0px;
+    justify-content: center;
+    align-items: center;
+}
+
+.delete-button {
+    alignment: right;
+}
+
+.check-button {
+    width: 20px;
+    margin: 10px;
+    padding: 20px;
+    alignment: center;
+    background-color: #008B8B;
+}
+
+.list-item-title {
+    display: flex;
+}
+
+.list-item-added-by {
+    font-size: small;
+}

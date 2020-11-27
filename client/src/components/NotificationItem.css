@@ -1,0 +1,16 @@
+.notification-item {
+    margin: 10px;
+    border-bottom: solid;
+    /*border-top: solid;*/
+}
+
+.text {
+    margin: 10px 10px 0px 10px;
+}
+
+.date {
+    font-style: italic;
+    color: #d5d5d5;
+    margin: 0px 10px 10px 10px;
+    font-size: smaller;
+}

@@ -1,0 +1,40 @@
+.header {
+    display: flex;
+}
+
+.notifications-container {
+    /*position: absolute;*/
+}
+
+.notifications-button {
+    display: flex;
+    position: absolute;
+    top: 8px;
+    right: 16px;
+}
+
+.new {
+    background-color: red;
+}
+
+.notifications-flyout {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 55px;
+    right: 16px;
+    width: 500px;
+    max-height: 1000px;
+    background: #00b3b3;
+    border: 1px solid #008B8B;
+    border-radius: 10px;
+    padding: 10px;
+    color: white;
+}
+
+.show-all-button-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 10px;
+}

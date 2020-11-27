@@ -1,0 +1,18 @@
+.shopping-list {
+    display: flex;
+}
+
+.column {
+    /*position: absolute;*/
+    /*float: left;*/
+    display: flex;
+    width: 50vw;
+    margin: 30px;
+}
+
+/* Clear floats after the columns */
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
