@@ -41,7 +41,7 @@ const AddListItem = (props) => {
       </div>
 
       <div className="form-group">
-        <label htmlFor="listItemUrl">URL</label>
+        <label htmlFor="listItemUrl">Website</label>
         <input type="text" className="form-control" id="listItemUrl" placeholder="URL" ref={urlRef} />
       </div>
 
