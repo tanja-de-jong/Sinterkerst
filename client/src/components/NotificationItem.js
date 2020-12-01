@@ -1,11 +1,38 @@
 import React from "react"
 import {connect} from "react-redux"
 import "./NotificationItem.css"
+import { makeStyles } from '@material-ui/core/styles';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import Typography from '@material-ui/core/Typography';
+import clsx from 'clsx';
+
+const useStyles = makeStyles({
+	root: {
+	  marginBottom: 10,
+	  width: '100%'
+	},
+	title: {
+	  fontSize: 14,
+	},
+	pos: {
+	  marginBottom: 12,
+	},
+	date: {
+		fontStyle: 'italic',
+		color: '#ababab',
+		// margin: '0px 10px 10px 10px',
+		fontSize: 'smaller',
+	}
+  });
 
 const NotificationItem = ({ notification, items, users }) => {
 	const committer = users.find(user => user.id === notification.committer)
 	const item = items.find(item => item.id === notification.item)
 	const owner = users.find(user => user.id === item.owner)
+
+	const classes = useStyles();
 
 	let dateNow = new Date()
 	const dateNowNoHours = new Date(dateNow.setHours(0, 0, 0))
@@ -29,10 +56,12 @@ const NotificationItem = ({ notification, items, users }) => {
 	if (daysRounded > 1) { daysText = daysRounded + " dagen geleden" }
 
 	return (
-		<div className="notification-item">
-			<p className="text">{text}</p>
-			<p className="date">{daysText}</p>
-		</div>
+		<Card className={classes.root} variant="outlined">
+			<CardContent>
+				<Typography>{text}</Typography>
+				<Typography className={classes.date}>{daysText}</Typography>
+			</CardContent>			
+		</Card>
 	)
 }
 

@@ -24,7 +24,7 @@ const OtherList = (props) => {
 }
 
 const mapStateToProps = state => ({
-  currentUser: state.currentUser,
+  currentUser: state.users.currentUser,
 });
 
 export default connect(mapStateToProps, null)(OtherList)

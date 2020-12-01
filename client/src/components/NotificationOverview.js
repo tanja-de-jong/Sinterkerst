@@ -7,19 +7,11 @@ import {Link, Redirect} from "react-router-dom"
 import NotificationList from "./NotificationList"
 import "./NotificationOverview.css"
 
-const NotificationOverview = (props) => {
+const NotificationOverview = ({ notifications }) => {
 	return (
-		props.currentUser === -1 ? <Redirect to='/' /> :
 		<div className="notification-overview-container">
-			<Link to="/">
-				<IconButton>
-					<ArrowBack fontSize="large"/>
-				</IconButton>
-			</Link>
-			<div className="notification-list-container">
-				<h2>Notificaties</h2>
-				<NotificationList notifications={props.notifications}/>
-			</div>
+			<h3>Notificaties</h3>
+			<NotificationList notifications={notifications}/>
 		</div>
 	)
 };

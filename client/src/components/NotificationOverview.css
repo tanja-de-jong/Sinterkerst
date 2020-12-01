@@ -1,10 +1,6 @@
-.notification-list-container {
-    padding: 0 30px 30px 30px;
-}
-
 .notification-overview-container {
-    /*background-color: #00b3b3;*/
-    /*color: white;*/
+    display: flex;
+    flex-direction: column;
 }
 
 .notification-list-container .date {

@@ -1,19 +1,25 @@
 import {connect, useDispatch} from "react-redux"
 import ShoppingList from "./ShoppingList"
 import UserButtons from "./UserButtons"
+import MenuIcon from '@material-ui/icons/Menu';
 import UserSelection from "./UserSelection"
+import NotificationOverview from "./NotificationOverview"
 import NotificationsIcon from '@material-ui/icons/Notifications'
+import AddIcon from '@material-ui/icons/Add';
 import {IconButton} from "@material-ui/core"
 import "./Dashboard.css"
 import React, {useEffect, useState} from "react"
 import {Link} from "react-router-dom"
 import NotificationList from "./NotificationList"
+import Menu from "./Menu"
 import {fetchUsers} from "../redux/users/thunks"
 import {fetchLogs, updateLog} from "../redux/logs/thunks"
+import AddListItem from "./AddListItem"
 
 const Dashboard = ({ users, usersLoading, currentUser, notifications, fetchUsers, fetchLogs, updateLog }) => {
-	const [showNotifications, setShowNotifications] = useState(false)
-	const dispatch = useDispatch()
+	const [menuOpen, setMenuOpen] = useState(false)
+	const [addDialogOpen, setAddDialogOpen] = useState(false)
+	const [list, setList] = useState(currentUser)
 
 	useEffect(() => {
 		fetchUsers()
@@ -22,32 +28,38 @@ const Dashboard = ({ users, usersLoading, currentUser, notifications, fetchUsers
 
 	const handleClick = () => {
 		updateLog(currentUser)
-		setShowNotifications(!showNotifications)
+		setList(-1)
 	}
 
   if (!users || !users.length) {
     return <div>Loading</div>
   } else {
   	if (currentUser === -1) {
-			return <UserSelection/>
-		} else {
-			const user = users.find(user => user.id === currentUser)
-			const otherUsers = users.filter(user => user.id !== currentUser)
+		return <UserSelection/>
+	} else {
+		const otherUsers = users.filter(user => user.id !== currentUser)
+		const content = list === -1 ? <NotificationOverview /> : <ShoppingList owner={list} dialogOpen={addDialogOpen} setDialogOpen={setAddDialogOpen} />
 
-      return <div>
-        <UserButtons users={otherUsers}/>
+      	return <div className="dashboard">
+			<IconButton onClick={() => setMenuOpen(!menuOpen)}>
+				<MenuIcon fontSize="large"/>
+			</IconButton>
+			<Menu open={menuOpen} setOpen={setMenuOpen} users={otherUsers} currentUser={currentUser} handleUserSelection={setList} />
 
-				<div className="notifications-button">
-					<IconButton onClick={handleClick}>
-						<NotificationsIcon fontSize="large"/>
-					</IconButton>
-				</div>
+			<div className="notifications-button">
+				<IconButton onClick={handleClick}>
+					<NotificationsIcon fontSize="large"/>
+				</IconButton>
+				<IconButton onClick={() => setAddDialogOpen(!addDialogOpen)}>
+					<AddIcon fontSize="large"/>
+				</IconButton>
+			</div>
 
-				<NotificationFlyout show={showNotifications} notifications={notifications} user={user}/>
+			<AddListItem owner={currentUser} open={addDialogOpen} setOpen={setAddDialogOpen} /> 
 
-        <ShoppingList owner={currentUser}/>
-      </div>
-		}
+			<div className="content">{content}</div>
+		</div>
+	}
   }
 }
 

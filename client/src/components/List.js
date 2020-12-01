@@ -16,7 +16,7 @@ const List = ({ owner, allItems, fetchItems }) => {
     const listItemElements = items.map(item => <ListItem item={item} key={item.id} owner={owner}/>)
 
     return (
-      <div className="column">
+      <div className="list-div">
         <h3 className="page-header">
 
           <ListHeader totalNumberOfListItems={3} owner={owner}/>

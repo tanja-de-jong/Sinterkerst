@@ -9,6 +9,9 @@
 
 .user-group {
     display: flex;
+    flex-direction: column;
+    text-align: center;
+    font-size: large;
 }
 .password-form {
     display: flex;

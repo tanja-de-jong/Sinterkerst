@@ -41,7 +41,7 @@ const itemsReducer = (state = defaultState, action) => {
 
 		case CREATE_ITEM_SUCCESS: {
 			let newState = _.cloneDeep(state);
-			newState.items.push(action.payload.item)
+			newState.items = [action.payload.item].concat(newState.items)
 			return newState
 		}
 
