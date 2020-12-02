@@ -7,6 +7,7 @@ const NotificationList = ({ notifications, items, users, currentUser, limit}) =>
 	const filteredNotifications = notifications.filter(notification => {
 		const item = items.find(item => item.id === notification.item)
 		console.log("Item")
+		console.log(notification)
 		console.log(item)
 		const owner = users.find(user => user.id === item.owner)
 		return owner.id !== currentUser && notification.committer !== currentUser
