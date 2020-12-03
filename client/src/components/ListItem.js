@@ -1,8 +1,6 @@
 import {connect} from "react-redux"
-import ListItemDescription from "./ListItemDescription"
 import './ListItem.css';
 import Button from "@material-ui/core/Button"
-import {useRef, useState} from "react"
 import {toggleCheck} from "../redux/items/thunks"
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
@@ -10,6 +8,7 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
+import LinkIcon from '@material-ui/icons/Link';
 var React = require('react');
 
 const useStyles = makeStyles({
@@ -26,12 +25,16 @@ const useStyles = makeStyles({
   strike: {
     textDecoration: 'line-through'
   },
+  togetherDiv: {
+    color: '#ababab',
+    fontSize: 'small'
+  },
+  connector: {
+    verticalAlign: 'middle'
+  }
 });
 
-const ListItem = ({ item, owner, currentUser, users, toggleCheck }) => {
-  const [askQuestion, setAskQuestion] = useState(false)
-  const questionRef = useRef(null)
-
+const ListItem = ({ item, listOwner, currentUser, users, toggleCheck }) => {
   const classes = useStyles();
 
   const handleCheckboxChange = (event) => {
@@ -39,66 +42,49 @@ const ListItem = ({ item, owner, currentUser, users, toggleCheck }) => {
     toggleCheck(item, currentUser);
   }
 
-  const handleAsk = (event) => {
-    event.preventDefault()
-    setAskQuestion(true)
-  }
-
-  const checkText = item.checked ? "Zet terug" : "Streep af"
-
   const reAddButton = () => {
     return (
-      item.checked && currentUser !== owner && currentUser === item.checkedby ?
+      item.checked && !item.owners.includes(currentUser) && currentUser === item.checkedby ?
         <div className="list-item-footer">
           <Button size="small" variant="contained" color="primary" onClick={handleCheckboxChange}>Zet terug</Button>
-          {/* <Button className="check-button" variant="contained" onClick={handleCheckboxChange}>Zet terug</Button> */}
         </div> : ''
     )
   }
 
   const checkButton = () => {
     return (
-      !item.checked && currentUser !== owner ?
+      !item.checked && !item.owners.includes(currentUser) ?
         <div className="list-item-footer"> 
           <Button size="small" variant="contained" color="primary" onClick={handleCheckboxChange}>Streep af</Button>
-          {/* <Button className="check-button" variant="contained" onClick={handleCheckboxChange}>Streep af</Button> */}
         </div> : ''
     )
   }
 
-  const askButton = () => {
-    return (
-      currentUser !== owner ?
-        <div className="list-item-footer">
-          <Button className="check-button" variant="contained" onClick={handleAsk}>Stel vraag</Button>
-        </div> : ''
-    )
+  const ownersArrayToString = (owners) => {
+    let result = owners[0]
+    for (let i = 1; i < owners.length - 1; i++) {
+      result += ', ' + owners[i]
+    }
+    if (owners.length > 1) result += ' en ' +  owners[owners.length - 1]
+    return result
   }
-
-  const askField = askQuestion ? <input type="text" className="form-control" placeholder="Type hier je vraag" inputRef={questionRef} /> : ''
-
+  
   const description = item.description.length > 0 ? item.description : <i>Geen omschrijving toegevoegd.</i>
   const url = item.url && item.url.length > 0 ? <a href={item.url} target="_blank">{item.url}</a> : ''
-
-  const urlElement = url === '' ? '' : <ListItemDescription description={url} />
-
-  const listItemClassName = item.checked && currentUser !== owner ? "list-item-container checked" : "list-item-container"
+  const otherOwners = item.owners.filter(owner => owner !== listOwner).map(owner => users.find(user => user.id === owner).name)
+  const together = item.owners.length > 1 ? <div className={classes.togetherDiv}><LinkIcon fontSize="small" className={classes.connector}/> Samen met { ownersArrayToString(otherOwners) }</div> : ''
 
   return (
     <Card className={classes.root} variant="outlined">
       <CardContent>
         <Typography className={clsx(classes.pos, {
-        [classes.strike]: item.checked && currentUser !== owner,
+        [classes.strike]: item.checked && !item.owners.includes(currentUser),
       })} color="textPrimary">
-          {item.checked && currentUser !== owner ? item.name : item.name}
-              {/* <div>
-                <h4 className="checked-title">{}</h4>
-                <p className="checked-by">Afgestreept door: {users.find(user => user.id === item.checkedby).name}</p>
-              </div> :
-              <h4>{item.name}</h4>} */}
+          {item.checked && !item.owners.includes(currentUser) ? item.name : item.name}
         </Typography>
+        {together}
           {
-            item.checked && currentUser !== owner
+            item.checked && !item.owners.includes(currentUser)
               ? <Typography color="textSecondary">
                   Afgestreept door: { users.find(user => user.id === item.checkedby).name }
                 </Typography>
@@ -116,26 +102,6 @@ const ListItem = ({ item, owner, currentUser, users, toggleCheck }) => {
         {reAddButton()}
       </CardActions>
     </Card>
-      // <div className={listItemClassName}>
-      //   <div className="list-item-header">
-      //     <div className="list-item-title">
-      //       {item.checked && currentUser !== owner ?
-      //         <div>
-      //           <h4 className="checked-title">{item.name}</h4>
-      //           <p className="checked-by">Afgestreept door: {users.find(user => user.id === item.checkedby).name}</p>
-      //         </div> :
-      //         <h4>{item.name}</h4>}
-      //     </div>
-      //   </div>
-      //   {urlElement}
-      //   <ListItemDescription description={description} />
-      //   <div className="list-item-footer">
-      //     {reAddButton()}
-      //     {checkButton()}
-      //     {/*{askButton()}*/}
-      //   </div>
-      //   {askField}
-      // </div>
   )
 }
 

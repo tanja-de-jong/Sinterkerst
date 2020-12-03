@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@auth0/auth0-react": "^1.0.0",
+    "classnames": "^2.2.6",
     "cors": "^2.8.5",
     "csvtojson": "^2.0.10",
     "dotenv": "^8.2.0",

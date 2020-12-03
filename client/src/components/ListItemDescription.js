@@ -1,5 +1,3 @@
-import {connect} from "react-redux"
-
 var React = require('react');
 
 const ListItemDescription = ({ description }) => {
@@ -10,9 +8,4 @@ const ListItemDescription = ({ description }) => {
     );
 };
 
-const mapStateToProps = state => ({
-  items: state.list,
-  currentUser: state.currentUser
-});
-
-export default connect(mapStateToProps)(ListItemDescription)
+export default ListItemDescription

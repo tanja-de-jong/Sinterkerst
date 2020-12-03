@@ -6,20 +6,20 @@ import {useEffect} from "react"
 import {fetchItems} from "../redux/items/thunks"
 var React = require('react');
 
-const List = ({ owner, allItems, fetchItems }) => {
+const List = ({ listOwner, allItems, fetchItems }) => {
   useEffect(() => {
     fetchItems()
   }, [])
 
   if (allItems) {
-    const items = allItems.filter(item => item.owner === owner)
-    const listItemElements = items.map(item => <ListItem item={item} key={item.id} owner={owner}/>)
+    const items = allItems.filter(item => item.owners.includes(listOwner))
+    const listItemElements = items.map(item => <ListItem item={item} listOwner={listOwner} key={item.id} />)
 
     return (
       <div className="list-div">
         <h3 className="page-header">
 
-          <ListHeader totalNumberOfListItems={3} owner={owner}/>
+          <ListHeader totalNumberOfListItems={3} listOwner={listOwner}/>
 
         </h3>
         <div className="item-list">

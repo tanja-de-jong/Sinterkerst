@@ -1,9 +1,7 @@
-import {connect, useDispatch} from "react-redux"
-import ShoppingList from "./ShoppingList"
-import UserButtons from "./UserButtons"
+import {connect} from "react-redux"
+import List from "./List"
 import MenuIcon from '@material-ui/icons/Menu';
 import UserSelection from "./UserSelection"
-import NotificationOverview from "./NotificationOverview"
 import NotificationsIcon from '@material-ui/icons/Notifications'
 import AddIcon from '@material-ui/icons/Add';
 import {IconButton} from "@material-ui/core"
@@ -13,23 +11,19 @@ import {Link} from "react-router-dom"
 import NotificationList from "./NotificationList"
 import Menu from "./Menu"
 import {fetchUsers} from "../redux/users/thunks"
-import {fetchLogs, updateLog} from "../redux/logs/thunks"
+import {fetchLogs} from "../redux/logs/thunks"
 import AddListItem from "./AddListItem"
 
-const Dashboard = ({ users, usersLoading, currentUser, notifications, fetchUsers, fetchLogs, updateLog }) => {
+const Dashboard = ({ users, currentUser, fetchUsers, fetchLogs }) => {
 	const [menuOpen, setMenuOpen] = useState(false)
 	const [addDialogOpen, setAddDialogOpen] = useState(false)
-	const [list, setList] = useState(currentUser)
+	const [listOwner, setListOwner] = useState(currentUser)
 
 	useEffect(() => {
 		fetchUsers()
 		fetchLogs()
 	}, [])
 
-	const handleClick = () => {
-		updateLog(currentUser)
-		setList(-1)
-	}
 
   if (!users || !users.length) {
     return <div>Loading</div>
@@ -38,16 +32,16 @@ const Dashboard = ({ users, usersLoading, currentUser, notifications, fetchUsers
 		return <UserSelection/>
 	} else {
 		const otherUsers = users.filter(user => user.id !== currentUser)
-		const content = list === -1 ? <NotificationOverview /> : <ShoppingList owner={list} dialogOpen={addDialogOpen} setDialogOpen={setAddDialogOpen} />
+		const content = listOwner === -1 ? <NotificationList /> : <List listOwner={listOwner} />
 
       	return <div className="dashboard">
 			<IconButton onClick={() => setMenuOpen(!menuOpen)}>
 				<MenuIcon fontSize="large"/>
 			</IconButton>
-			<Menu open={menuOpen} setOpen={setMenuOpen} users={otherUsers} currentUser={currentUser} handleUserSelection={setList} />
+			<Menu open={menuOpen} setOpen={setMenuOpen} users={otherUsers} currentUser={currentUser} handleUserSelection={setListOwner} />
 
 			<div className="notifications-button">
-				<IconButton onClick={handleClick}>
+				<IconButton onClick={() => setListOwner(-1)}>
 					<NotificationsIcon fontSize="large"/>
 				</IconButton>
 				<IconButton onClick={() => setAddDialogOpen(!addDialogOpen)}>
@@ -55,7 +49,7 @@ const Dashboard = ({ users, usersLoading, currentUser, notifications, fetchUsers
 				</IconButton>
 			</div>
 
-			<AddListItem owner={currentUser} open={addDialogOpen} setOpen={setAddDialogOpen} /> 
+			<AddListItem open={addDialogOpen} setOpen={setAddDialogOpen} /> 
 
 			<div className="content">{content}</div>
 		</div>
@@ -64,29 +58,14 @@ const Dashboard = ({ users, usersLoading, currentUser, notifications, fetchUsers
 }
 
 const mapStateToProps = state => ({
-  users: state.users.users,
+  	users: state.users.users,
 	usersLoading: state.users.loading,
-  currentUser: state.users.currentUser,
-	notifications: state.logs.logs,
+  	currentUser: state.users.currentUser,
 });
 
 const mapDispatchToProps = dispatch => ({
   fetchUsers: () => dispatch(fetchUsers()),
   fetchLogs: () => dispatch(fetchLogs()),
-  updateLog: (userId) => dispatch(updateLog(userId)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard)
-
-const NotificationFlyout = ({show, notifications}) => {
-	// TODO: filter notifications by user
-	return (
-		show ?
-			<div className="notifications-flyout">
-				<NotificationList notifications={notifications} limit={10}/>
-				<div className="show-all-button-container"><Link to="/updates">Toon alles</Link></div>
-			</div> :
-			''
-	)
-}
-

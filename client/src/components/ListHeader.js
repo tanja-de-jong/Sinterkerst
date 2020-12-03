@@ -6,7 +6,7 @@ const ListHeader = (props) => {
   var totalNumberOfListItems = props.totalNumberOfListItems;
 
   return (
-    <span>Verlanglijst van {props.users.find(user => user.id === props.owner).name}</span>
+    <span>Verlanglijst van {props.users.find(user => user.id === props.listOwner).name}</span>
   )
 }
 

@@ -1,20 +1,47 @@
 import React, { useState } from "react"
 import {connect} from "react-redux"
-import {useRef} from "react"
 import {createItem} from "../redux/items/thunks"
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import Select from '@material-ui/core/Select';
+import Input from '@material-ui/core/Input';
+import MenuItem from '@material-ui/core/MenuItem';
+import InputLabel from '@material-ui/core/InputLabel'
+import FormControl from '@material-ui/core/FormControl';
+import { makeStyles } from '@material-ui/core/styles';
 
-const AddListItem = ({ owner, currentUser, open, setOpen, createItem }) => {
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
+
+const useStyles = makeStyles((theme) => ({
+  formControl: {
+    minWidth: 120,
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(2),
+  },
+}));
+
+const AddListItem = ({ currentUser, users, open, setOpen, createItem }) => {
   const [name, setName] = useState('')
   const [url, setUrl] = useState('')
   const [description, setDescription] = useState('')
   const [error, setError] = useState(false)
+  const [owners, setOwners] = useState([])
+
+  const classes = useStyles();
 
   const styleRequired = {
     color: "#ffaaaa"
@@ -24,6 +51,7 @@ const AddListItem = ({ owner, currentUser, open, setOpen, createItem }) => {
     setName('')
     setUrl('')
     setDescription('')
+    setOwners([])
     setError(false)
     setOpen(false)
   }
@@ -36,15 +64,13 @@ const AddListItem = ({ owner, currentUser, open, setOpen, createItem }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    console.log("Name: " + name)
-    console.log("URL: " + url)
-    console.log("Description: " + description)
-
     if (name && name.length) {
       const completeUrl = url.trim().length > 0 && url.substring(0, 4) !== "http" ? "http://" + url : url
+      owners.push(currentUser)
+    
 
       var item = {
-        owner: owner,
+        owners: owners,
         name: name.trim(),
         url: completeUrl || '',
         description: description.trim() || '',
@@ -91,6 +117,24 @@ const AddListItem = ({ owner, currentUser, open, setOpen, createItem }) => {
           type="text"
           fullWidth
         />
+        <FormControl className={classes.formControl}>
+          <InputLabel id="with-select-label">Samen met</InputLabel>
+          <Select
+            multiple
+            id="with-select"
+            labelId="with-select-label"
+            value={owners}
+            onChange={(event) => setOwners(event.target.value)}
+            input={<Input />}
+            MenuProps={MenuProps}
+          >
+            {users.filter(user => user.id !== currentUser).map((user) => (
+              <MenuItem key={user.id} value={user.id}>
+                {user.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
       </DialogContent>
       <DialogActions>
           <Button onClick={handleCancel} color="primary">
@@ -100,36 +144,13 @@ const AddListItem = ({ owner, currentUser, open, setOpen, createItem }) => {
             Voeg toe
           </Button>
         </DialogActions>
-{/* 
-      <form onSubmit={handleSubmitEvent} ref={formRef}>
-        <h3 className="page-header">Voeg toe</h3>
-
-        <div className="form-group">
-          <label htmlFor="listItemName">Naam <span style={styleRequired}>*</span></label>
-          <input type="text" className="form-control" id="listItemName" placeholder="Naam" ref={nameRef} />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="listItemUrl">Website</label>
-          <input type="text" className="form-control" id="listItemUrl" placeholder="URL" ref={urlRef} />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="listItemDescription">Omschrijving</label>
-          <textarea className="form-control" rows="3" id="listItemDescription" placeholder="Omschrijving" ref={descriptionRef} />
-        </div>
-
-        <hr />
-
-        <button type="submit" className="btn btn-primary">Voeg toe</button>
-        <button type="reset" className="btn btn-link">Annuleer</button>
-      </form> */}
     </Dialog>
   )
 }
 
 const mapStateToProps = state => ({
-  currentUser: state.currentUser
+  currentUser: state.users.currentUser,
+  users: state.users.users
 });
 
 const mapDispatchToProps = dispatch => ({

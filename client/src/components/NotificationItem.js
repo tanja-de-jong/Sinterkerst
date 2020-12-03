@@ -6,7 +6,7 @@ import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
-import clsx from 'clsx';
+import cx from 'classnames';
 
 const useStyles = makeStyles({
 	root: {
@@ -24,13 +24,16 @@ const useStyles = makeStyles({
 		color: '#ababab',
 		// margin: '0px 10px 10px 10px',
 		fontSize: 'smaller',
+	},
+	unread: {
+		backgroundColor: '#ffffed'
 	}
   });
 
-const NotificationItem = ({ notification, items, users }) => {
+const NotificationItem = ({ notification, items, users, lastLogId }) => {
 	const committer = users.find(user => user.id === notification.committer)
 	const item = items.find(item => item.id === notification.item)
-	const owner = users.find(user => user.id === item.owner)
+	const owners = users.filter(user => item.owners.includes(user.id))
 
 	const classes = useStyles();
 
@@ -43,20 +46,37 @@ const NotificationItem = ({ notification, items, users }) => {
 	var days = Math.abs(Math.round(dateNow - dateCreated) / (1000 * 60 * 60 * 24))
 	const daysRounded = Number(days.toFixed(0))
 
+	const ownersArrayToString = () => {
+		if (owners.length === 0) {
+			return ''
+		} else if (owners.length === 1) {
+			return 'de verlanglijst van ' + owners[0].name
+		} else {
+			let result = 'de verlanglijsten van ' + owners[0].name
+			for (let i = 1; i < owners.length - 1; i++) {
+				result += ', ' + owners[i].name
+			}
+			result += ' en ' +  owners[owners.length - 1].name
+			return result
+		}
+	}
+
 	let text = "Voor deze actie is geen tekst beschikbaar: " + notification.type + "."
 	if (notification.type === "CREATE_ITEM") {
-		text = "'" + item.name + "' is toegevoegd aan " + owner.name + "'s verlanglijst."
+		text = "'" + item.name + "' is toegevoegd aan " + ownersArrayToString() + "."
 	} else if (notification.type === "CHECK_ITEM") {
-		text = "'" + item.name + "' van " + owner.name + "'s verlanglijst is afgestreept door " + committer.name + "."
+		text = "'" + item.name + "' van " + ownersArrayToString() + " is afgestreept door " + committer.name + "."
 	} else if (notification.type === "UNCHECK_ITEM") {
-		text = "'" + item.name + "' van " + owner.name + "'s verlanglijst is teruggezet door " + committer.name + "."
+		text = "'" + item.name + "' van " + ownersArrayToString() + " is teruggezet door " + committer.name + "."
 	}
 	let daysText = "vandaag"
 	if (daysRounded === 1) { daysText = "gisteren" }
 	if (daysRounded > 1) { daysText = daysRounded + " dagen geleden" }
 
 	return (
-		<Card className={classes.root} variant="outlined">
+		<Card className={cx(classes.root, {
+			[classes.unread]: notification.id > lastLogId,
+		  })} variant="outlined">
 			<CardContent>
 				<Typography>{text}</Typography>
 				<Typography className={classes.date}>{daysText}</Typography>

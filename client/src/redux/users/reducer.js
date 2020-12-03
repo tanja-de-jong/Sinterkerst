@@ -42,12 +42,12 @@ const usersReducer = (state = defaultState, action) => {
 			return newState;
 		}
 
-		case UPDATE_LOG_SUCCESS: {
-			return {
-				...state,
-				users: state.users.map(user =>  user.id === action.payload.user.id ? action.payload.user : user)
-			}
-		}
+		// case UPDATE_LOG_SUCCESS: {
+		// 	return {
+		// 		...state,
+		// 		users: state.users.map(user =>  user.id === action.payload.user.id ? action.payload.user : user)
+		// 	}
+		// }
 
 		default:
 			return state;
