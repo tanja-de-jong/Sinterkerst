@@ -94,7 +94,6 @@ const updateLog = async (request, response) => {
 const postItem = (request, response) => {
   console.log("API: Post item")
   const { owners, name, url, description, createdBy } = request.body
-  console.log(owners)
   pool.query('INSERT INTO items (owners, name, url, description, createdBy, checked, checkedBy) VALUES ($1, $2, $3, $4, $5, false, -1) RETURNING *', [owners, name, url, description, createdBy], async (error, res) => {
     if (error) {
       throw error
