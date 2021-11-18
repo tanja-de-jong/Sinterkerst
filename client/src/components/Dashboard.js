@@ -32,7 +32,7 @@ const Dashboard = ({ users, currentUser, fetchUsers, fetchLogs }) => {
 		return <UserSelection/>
 	} else {
 		const otherUsers = users.filter(user => user.id !== currentUser)
-		// const content = listOwner === -1 ? <NotificationList /> : <List listOwner={listOwner} />
+		const content = listOwner === -1 ? <NotificationList /> : <List listOwner={listOwner} />
 
       	return <div className="dashboard">
 			<IconButton onClick={() => setMenuOpen(!menuOpen)}>
@@ -51,7 +51,7 @@ const Dashboard = ({ users, currentUser, fetchUsers, fetchLogs }) => {
 
 			<AddListItem open={addDialogOpen} setOpen={setAddDialogOpen} /> 
 
-			{/* <div className="content">{content}</div> */}
+			<div className="content">{content}</div>
 		</div>
 	}
   }
